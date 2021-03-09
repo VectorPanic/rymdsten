@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Rymdsten</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        
+        <!-- SOFTWARE DEVELOPMENT KIT -->
+        <script src="../lib/rune.js"></script>
+        
+        <!-- DEMO APPLICATION SOURCE CODE -->
+        <script src="../src/scope/Manifest.js"></script>
+
+        <script src="./../src/util/MappingKeyboard.js"></script>
+        <script src="./../src/util/MappingGamepad.js"></script>
+        <script src="./../src/util/Controls.js"></script>
+        
+        <script src="../src/data/manifest/Manifest.js"></script>
+        
+        <script src="./../src/ui/graphic/OverthinkersLogo.js"></script>
+        <script src="./../src/ui/life/Life.js"></script>
+        <script src="./../src/ui/life/Lives.js"></script>
+        <script src="./../src/ui/text/Score.js"></script>
+        <script src="./../src/ui/text/Highscore.js"></script>
+        <script src="./../src/ui/text/GameOver.js"></script>
+        <script src="./../src/ui/text/Copyright.js"></script>
+        <script src="./../src/ui/text/PushStart.js"></script>
+        <script src="./../src/ui/hud/HUD.js"></script>
+        
+        <script src="./../src/entity/body/Body.js"></script>
+        <script src="./../src/entity/bullet/Bullet.js"></script>
+        <script src="./../src/entity/bullet/Bullets.js"></script>
+        <script src="./../src/entity/ship/Ship.js"></script>
+        <script src="./../src/entity/ship/Ships.js"></script>
+        <script src="./../src/entity/asteroid/Asteroid.js"></script>
+        <script src="./../src/entity/asteroid/Asteroids.js"></script>
+        <script src="./../src/entity/asteroid/type/AsteroidLarge.js"></script>
+        <script src="./../src/entity/asteroid/type/AsteroidMedium.js"></script>
+        <script src="./../src/entity/asteroid/type/AsteroidSmall.js"></script>
+        <script src="./../src/entity/saucer/Saucer.js"></script>
+        <script src="./../src/entity/saucer/Saucers.js"></script>
+        <script src="./../src/entity/saucer/type/SaucerSmall.js"></script>
+        <script src="./../src/entity/saucer/type/SaucerLarge.js"></script>
+        
+        <script src="./../src/attack/Attacks.js"></script>
+        
+        <script src="./../src/wave/Wave.js"></script>
+        <script src="./../src/wave/Waves.js"></script>
+        <script src="./../src/wave/type/Wave_001.js"></script>
+        <script src="./../src/wave/type/Wave_002.js"></script>
+        <script src="./../src/wave/type/Wave_003.js"></script>
+        
+        <script src="./../src/scene/splash/Splash.js"></script>
+        <script src="./../src/scene/game/state/GameStateDead.js"></script>
+        <script src="./../src/scene/game/state/GameStateIntro.js"></script>
+        <script src="./../src/scene/game/state/GameStateOver.js"></script>
+        <script src="./../src/scene/game/state/GameStatePlay.js"></script>
+        <script src="./../src/scene/game/state/GameStateStart.js"></script>
+        <script src="./../src/scene/game/Game.js"></script>
+        
+        <script src="../src/system/Main.js"></script>
+        <script src="../src/scope/Alias.js"></script>
+        
+        <!-- BOOTSTRAP -->
+        <script>
+            
+            window.onload = function() {
+                var app = new rymdsten.system.Main();
+                app.start();
+            }
+            
+        </script>
+
+    </head>
+
+</html>

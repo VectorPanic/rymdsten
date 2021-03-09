@@ -1,0 +1,17 @@
+# SYSTEM FILES
+.DS_Store
+
+# IDE FILES
+.nova
+
+# BUILD FILES
+scripts/log
+
+# NPM
+node_modules
+
+# DOCUMENTATION
+docs
+
+# TEMP FILES
+asset/tmp

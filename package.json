@@ -1,0 +1,20 @@
+{
+  "name": "rymdsten",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/bootstrap.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "electron ./bin-debug/bootstrap.js",
+    "start": "electron ./bin/bootstrap.js"
+  },
+  "author": "Henrik Andersen",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^11.2.3",
+    "google-closure-compiler": "^20210202.0.0",
+    "jsdoc": "^3.6.6"
+  }
+}
