@@ -30,6 +30,7 @@ rymdsten.system.Main = function() {
         resources: rymdsten.data.Manifest,
         debug: false,
         useKeyboard: true,
+        useGamepads: true,
         framerate: 60,
         screenResolutionX: 1280,
         screenResolutionY: 720
