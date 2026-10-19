@@ -8,12 +8,12 @@
  * @constructor
  * @extends rymdsten.entity.Asteroid
  *
- * @param {number} x ...
- * @param {number} y ...
+ * @param {number} x Horizontal position in pixels.
+ * @param {number} y Vertical position in pixels.
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents a medium asteroid.
  */
 rymdsten.entity.AsteroidMedium = function(x, y) {
@@ -21,16 +21,16 @@ rymdsten.entity.AsteroidMedium = function(x, y) {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rymdsten.entity.Asteroid.
      */
     rymdsten.entity.Asteroid.call(this, x, y, 30, 30, "", "rymdsten_texture_asteroid_medium_30x30");
 
     //--------------------------------------------------------------------------
     // Override public properties
     //--------------------------------------------------------------------------
-    
+
     /**
      * @inheritDoc
      */
@@ -55,11 +55,11 @@ rymdsten.entity.AsteroidMedium = function(x, y) {
      * @inheritDoc
      */
     this.score = 50;
-    
+
     /**
      * @inheritDoc
      */
-    this.soundKill = this.resources.get("rymdsten_asteroid_medium_kill");
+    this.soundKill = this.application.sounds.sound.get("rymdsten_sound_asteroid_explode_medium");
 };
 
 //------------------------------------------------------------------------------
@@ -78,5 +78,5 @@ rymdsten.entity.AsteroidMedium.prototype.constructor = rymdsten.entity.AsteroidM
  */
 rymdsten.entity.AsteroidMedium.prototype.kill = function() {
     rymdsten.entity.Asteroid.prototype.kill.call(this);
-    this.cameras.getCamera(0).shake.start(1000, 5, 5, true); //@note: Magic numbers.
+    this.application.scenes.selected.cameras.getCameraAt(0).shake.start(1000, 5, 5, true); //@note: Magic numbers.
 };

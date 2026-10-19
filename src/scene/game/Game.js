@@ -10,7 +10,7 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * Game state.
  */
 rymdsten.scene.Game = function() {
@@ -18,7 +18,7 @@ rymdsten.scene.Game = function() {
     //--------------------------------------------------------------------------
     // Private properties
     //--------------------------------------------------------------------------
-    
+
     /**
      * Handles (UFO) attacks.
      *
@@ -26,7 +26,7 @@ rymdsten.scene.Game = function() {
      * @private
      */
     this.m_attacks = null;
-    
+
     /**
      * The heads up display.
      *
@@ -34,7 +34,7 @@ rymdsten.scene.Game = function() {
      * @private
      */
     this.m_hud = null;
-    
+
     /**
      * Handler for ships.
      *
@@ -42,7 +42,7 @@ rymdsten.scene.Game = function() {
      * @private
      */
     this.m_ships = null;
-    
+
     /**
      * Handler for waves.
      *
@@ -54,9 +54,9 @@ rymdsten.scene.Game = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.scene.Scene.
      */
     rune.scene.Scene.call(this);
 };
@@ -111,7 +111,7 @@ Object.defineProperty(rymdsten.scene.Game.prototype, "attacks", {
 /**
  * Reference to the HUD.
  *
- * @member {rymdsten.ui.HUD} HUD
+ * @member {rymdsten.ui.HUD} hud
  * @memberof rymdsten.scene.Game
  * @instance
  * @readonly
@@ -208,8 +208,8 @@ rymdsten.scene.Game.prototype.dispose = function() {
  */
 rymdsten.scene.Game.prototype.m_initCamera = function() {
     rune.scene.Scene.prototype.m_initCamera.call(this);
-    this.cameras.getCamera(0).fade.opacity = 1.0;
-    this.cameras.getCamera(0).fade.in(3000); //@note: Magic number.
+    this.cameras.getCameraAt(0).fade.opacity = 1.0;
+    this.cameras.getCameraAt(0).fade.in(3000); //@note: Magic number.
 };
 
 //------------------------------------------------------------------------------
@@ -219,7 +219,7 @@ rymdsten.scene.Game.prototype.m_initCamera = function() {
 /**
  * Creates the HUD.
  *
- * @returns {undefined} ...
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Game.prototype.m_initHUD = function() {
@@ -233,7 +233,7 @@ rymdsten.scene.Game.prototype.m_initHUD = function() {
 /**
  * Creates the attack manager.
  *
- * @returns {undefined} ...
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Game.prototype.m_initAttacks = function() {
@@ -246,7 +246,7 @@ rymdsten.scene.Game.prototype.m_initAttacks = function() {
 /**
  * Creates the ships manager.
  *
- * @returns {undefined} ...
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Game.prototype.m_initShips = function() {
@@ -259,23 +259,23 @@ rymdsten.scene.Game.prototype.m_initShips = function() {
 /**
  * Creates the waves manager.
  *
- * @returns {undefined} ...
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Game.prototype.m_initWaves = function() {
     this.m_disposeWaves();
     if (this.m_waves == null) {
         this.m_waves = new rymdsten.wave.Waves(this);
-        this.m_waves.add(new rymdsten.wave.Wave_001());
-        this.m_waves.add(new rymdsten.wave.Wave_002());
-        this.m_waves.add(new rymdsten.wave.Wave_003());
+        this.m_waves.add(new rymdsten.wave.Wave001());
+        this.m_waves.add(new rymdsten.wave.Wave002());
+        this.m_waves.add(new rymdsten.wave.Wave003());
     } else throw new Error();
 };
 
 /**
  * Activates sub-states.
  *
- * @returns {undefined} ...
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Game.prototype.m_initState = function() {
@@ -285,9 +285,9 @@ rymdsten.scene.Game.prototype.m_initState = function() {
 /**
  * Updates the attack manager.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @returns {undefined} ...
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Game.prototype.m_updateAttacks = function(step) {
@@ -299,9 +299,9 @@ rymdsten.scene.Game.prototype.m_updateAttacks = function(step) {
 /**
  * Updates the waves manager.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @returns {undefined} ...
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Game.prototype.m_updateWaves = function(step) {
@@ -313,51 +313,51 @@ rymdsten.scene.Game.prototype.m_updateWaves = function(step) {
 /**
  * Check for debug input.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @returns {undefined} ...
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Game.prototype.m_updateInput = function(step) {
     if (this.keyboard.pressed("X")) {
-        
+
         // DEBUG RENDER
         if (this.keyboard.justPressed("C")) {
-            this.cameras.getCamera(0).debug = !this.cameras.getCamera(0).debug;
+            this.cameras.getCameraAt(0).debug = !this.cameras.getCameraAt(0).debug;
         }
-        
+
         // NEXT WAVES
         if (this.keyboard.justPressed("N")) {
             this.m_waves.next();
         }
-        
+
         // PREVIOUS WAVES
         if (this.keyboard.justPressed("P")) {
             this.m_waves.previous();
         }
-        
+
         // KILL SHIP
         if (this.keyboard.justPressed("K")) {
-            if (this.m_ships.numChildren > 0) {
-                this.m_ships.getChildAt(0).kill()
+            if (this.m_ships.numMembers > 0) {
+                this.m_ships.getMemberAt(0).kill();
             }
         }
-        
+
         // RESET HIGHSCORE
         if (this.keyboard.justPressed("R")) {
             this.m_hud.highscore.clear();
         }
-        
+
         // CREATE LARGE SAUCER
         if (this.keyboard.justPressed("L")) {
             this.m_attacks.saucers.create(0, 0, "large");
         }
-        
+
         // CREATE SMALL SAUCER
         if (this.keyboard.justPressed("S")) {
             this.m_attacks.saucers.create(0, 0, "small");
         }
-        
+
         // EXTRA LIFE
         if (this.keyboard.justPressed("E")) {
             this.m_hud.score += 10000;
@@ -368,7 +368,7 @@ rymdsten.scene.Game.prototype.m_updateInput = function(step) {
 /**
  * Removes the waves handler.
  *
- * @returns {undefined} ...
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Game.prototype.m_disposeWaves = function() {
@@ -381,12 +381,12 @@ rymdsten.scene.Game.prototype.m_disposeWaves = function() {
 /**
  * Removes the ships handler.
  *
- * @returns {undefined} ...
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Game.prototype.m_disposeShips = function() {
     if (this.m_ships instanceof rymdsten.entity.Ships) {
-        this.m_ships.dispose();
+        this.groups.remove(this.m_ships, true);
         this.m_ships = null;
     }
 };
@@ -394,7 +394,7 @@ rymdsten.scene.Game.prototype.m_disposeShips = function() {
 /**
  * Removes the attack handler.
  *
- * @returns {undefined} ...
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Game.prototype.m_disposeAttacks = function() {
@@ -407,7 +407,7 @@ rymdsten.scene.Game.prototype.m_disposeAttacks = function() {
 /**
  * Removes the HUD.
  *
- * @returns {undefined} ...
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Game.prototype.m_disposeHUD = function() {

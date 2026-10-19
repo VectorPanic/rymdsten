@@ -8,21 +8,21 @@
  * @constructor
  * @extends rune.display.DisplayGroup
  *
- * @param {rymdsten.scene.Game} game ...
+ * @param {rymdsten.scene.Game} game Game scene that owns this manager.
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents a manager for saucers.
  */
 rymdsten.entity.Saucers = function(game) {
-    
+
     //--------------------------------------------------------------------------
     // Private properties
     //--------------------------------------------------------------------------
 
     /**
-     * ...
+     * Reference to the game scene.
      *
      * @type {rymdsten.scene.Game}
      * @private
@@ -30,17 +30,17 @@ rymdsten.entity.Saucers = function(game) {
     this.m_game = game;
 
     //--------------------------------------------------------------------------
-    //  Constructor call
+    // Constructor call
     //--------------------------------------------------------------------------
-    
+
     /**
-     *  ...
+     *  Extend rune.display.DisplayGroup.
      */
     rune.display.DisplayGroup.call(this, this.m_game.stage);
 };
 
 //------------------------------------------------------------------------------
-//  Inheritance
+// Inheritance
 //------------------------------------------------------------------------------
 
 rymdsten.entity.Saucers.prototype = Object.create(rune.display.DisplayGroup.prototype);
@@ -51,14 +51,14 @@ rymdsten.entity.Saucers.prototype.constructor = rymdsten.entity.Saucers;
 //------------------------------------------------------------------------------
 
 /**
- * ...
+ * Identifier for small saucers.
  *
  * @const {string}
  */
 rymdsten.entity.Saucers.SMALL = "small";
 
 /**
- * ...
+ * Identifier for large saucers.
  *
  * @const {string}
  */
@@ -69,7 +69,7 @@ rymdsten.entity.Saucers.LARGE = "large";
 //------------------------------------------------------------------------------
 
 /**
- * ...
+ * Bullet group associated with these objects.
  *
  * @member {rymdsten.entity.Bullets} bullets
  * @memberof rymdsten.entity.Saucers
@@ -87,7 +87,7 @@ Object.defineProperty(rymdsten.entity.Saucers.prototype, "bullets", {
 });
 
 /**
- * ...
+ * Game scene that owns this group.
  *
  * @member {rymdsten.scene.Game} game
  * @memberof rymdsten.entity.Saucers
@@ -109,37 +109,37 @@ Object.defineProperty(rymdsten.entity.Saucers.prototype, "game", {
 //------------------------------------------------------------------------------
 
 /**
- * ...
+ * Creates a game object at the requested position.
  *
- * @param {number} [x=0] ...
- * @param {number} [y=0] ...
- * @param {string} [type="large"] ...
+ * @param {number} [x=0] Horizontal position in pixels.
+ * @param {number} [y=0] Vertical position in pixels.
+ * @param {string} [type="large"] Size identifier of the object to create.
  *
- * @return {undefined}
+ * @returns {undefined}
  */
 rymdsten.entity.Saucers.prototype.create = function(x, y, type) {
-    if (this.numChildren == 0) {
+    if (this.numMembers == 0) {
         var Saucer = this.m_getType(type);
         var saucer = new Saucer(this);
-            saucer.centerX = x;
-            saucer.centerY = y;
-            saucer.flicker(1000, 60); //@note: Magic numbers.
-            
-        this.addChild(saucer);
+        saucer.centerX = x;
+        saucer.centerY = y;
+        saucer.flicker.start(1000, 60); //@note: Magic numbers.
+
+        this.addMember(saucer);
     }
 };
 
 /**
- * ...
+ * Resets the managed objects and prepares them for a new game.
  *
- * @return {undefined}
+ * @returns {undefined}
  */
 rymdsten.entity.Saucers.prototype.reset = function() {
     if (this.m_bullets) {
-        this.m_bullets.removeChildren();
+        this.m_bullets.removeMembers();
     }
-    
-    this.removeChildren();
+
+    this.removeMembers();
 };
 
 //------------------------------------------------------------------------------
@@ -177,7 +177,7 @@ rymdsten.entity.Saucers.prototype.dispose = function() {
 /**
  * Creates the handler for bullets.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.entity.Saucers.prototype.m_initBullets = function() {
@@ -192,20 +192,20 @@ rymdsten.entity.Saucers.prototype.m_initBullets = function() {
 /**
  * Controls collision between saucers and other game objects.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.entity.Saucers.prototype.m_updateCollision = function(step) {
-    
+
     // ASTEROIDS
     this.hitTestGroup(
         this.m_game.waves.asteroids,
         this.m_onAsteroidCollision,
         this
     );
-    
+
     // SHIP BULLETS
     this.hitTestGroup(
         this.m_game.ships.bullets,
@@ -217,7 +217,7 @@ rymdsten.entity.Saucers.prototype.m_updateCollision = function(step) {
 /**
  * Remove the bullet handler.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.entity.Saucers.prototype.m_disposeBullets = function() {
@@ -230,14 +230,14 @@ rymdsten.entity.Saucers.prototype.m_disposeBullets = function() {
 /**
  * When a saucer collides with an asteroid.
  *
- * @param {rymdsten.entity.Asteroid} asteroid ...
- * @param {rymdsten.entity.Saucer} saucer ...
+ * @param {rymdsten.entity.Saucer} saucer Saucer involved in the collision.
+ * @param {rymdsten.entity.Asteroid} asteroid Asteroid involved in the collision.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
-rymdsten.entity.Saucers.prototype.m_onAsteroidCollision = function(asteroid, saucer) {
-    if (saucer.flickering == false) {
+rymdsten.entity.Saucers.prototype.m_onAsteroidCollision = function(saucer, asteroid) {
+    if (saucer.flicker.active == false) {
         saucer.kill();
     }
 };
@@ -245,20 +245,20 @@ rymdsten.entity.Saucers.prototype.m_onAsteroidCollision = function(asteroid, sau
 /**
  * When a saucer collides with a bullet from the ship.
  *
- * @param {rymdsten.entity.Bullet} bullet ...
- * @param {rymdsten.entity.Saucer} saucer ...
+ * @param {rymdsten.entity.Saucer} saucer Saucer involved in the collision.
+ * @param {rymdsten.entity.Bullet} bullet Bullet involved in the collision.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
-rymdsten.entity.Saucers.prototype.m_onBulletCollision = function(bullet, saucer) {
-    if (saucer.flickering == false) {
+rymdsten.entity.Saucers.prototype.m_onBulletCollision = function(saucer, bullet) {
+    if (saucer.flicker.active == false) {
         saucer.kill();
-        
+
         this.m_game.hud.score += saucer.score;
-        
+
         if (bullet.group != null) {
-            bullet.group.removeChild(bullet);
+            bullet.group.removeMember(bullet);
         }
     }
 };
@@ -266,15 +266,15 @@ rymdsten.entity.Saucers.prototype.m_onBulletCollision = function(bullet, saucer)
 /**
  * Returns the type of saucer, based on string value.
  *
- * @param {string} type ...
+ * @param {string} type Size identifier of the object to create.
  *
- * @return {Function}
+ * @returns {Function}
  * @private
  */
 rymdsten.entity.Saucers.prototype.m_getType = function(type) {
     if (type == rymdsten.entity.Saucers.SMALL) {
         return rymdsten.entity.SaucerSmall;
     }
-    
+
     return rymdsten.entity.SaucerLarge;
 };

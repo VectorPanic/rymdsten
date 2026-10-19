@@ -6,26 +6,26 @@
  * Creates a new object.
  *
  * @constructor
- * @extends rune.physics.Body
+ * @extends rune.display.Sprite
  *
- * @param {number} x ...
- * @param {number} y ...
- * @param {number} width ...
- * @param {number} height ...
- * @param {string} color ...
- * @param {string} texture ...
+ * @param {number} x Horizontal position in pixels.
+ * @param {number} y Vertical position in pixels.
+ * @param {number} width Width of the object in pixels.
+ * @param {number} height Height of the object in pixels.
+ * @param {string} color Background fill color; an empty string leaves the background transparent.
+ * @param {string} texture Name of the texture resource.
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents a physical object.
  */
 rymdsten.entity.Body = function(x, y, width, height, color, texture) {
-    
+
     //--------------------------------------------------------------------------
     // Public properties
     //--------------------------------------------------------------------------
-    
+
     /**
      * Sound for when the object is removed.
      *
@@ -34,39 +34,86 @@ rymdsten.entity.Body = function(x, y, width, height, color, texture) {
      */
     this.soundKill = null;
 
+    /**
+     * Remaining health of the game entity.
+     *
+     * @type {number}
+     * @default 100
+     */
+    this.health = 100;
+
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.display.Sprite.
      */
-    rune.physics.Body.call(this, x, y, width, height, color, texture);
+    rune.display.Sprite.call(this, x, y, width, height, texture);
+    this.backgroundColor = color || "";
+    this.movable = true;
 };
 
 //------------------------------------------------------------------------------
 // Inheritance
 //------------------------------------------------------------------------------
 
-rymdsten.entity.Body.prototype = Object.create(rune.physics.Body.prototype);
+rymdsten.entity.Body.prototype = Object.create(rune.display.Sprite.prototype);
 rymdsten.entity.Body.prototype.constructor = rymdsten.entity.Body;
 
 //------------------------------------------------------------------------------
-// Override public prototype methods (API)
+// Public prototype getter and setter methods
 //------------------------------------------------------------------------------
 
 /**
- * @inheritDoc
+ * Whether the entity has health remaining.
+ *
+ * @member {boolean} alive
+ * @memberof rymdsten.entity.Body
+ * @instance
+ * @readonly
+ */
+Object.defineProperty(rymdsten.entity.Body.prototype, "alive", {
+    /**
+     * @this rymdsten.entity.Body
+     * @ignore
+     */
+    get : function() {
+        return this.health > 0;
+    }
+});
+
+//------------------------------------------------------------------------------
+// Public prototype methods (API)
+//------------------------------------------------------------------------------
+
+/**
+ * Removes the entity from its group and plays its destruction sound.
+ *
+ * @returns {undefined}
  */
 rymdsten.entity.Body.prototype.kill = function() {
-    rune.physics.Body.prototype.kill.call(this);
+    this.health = 0;
     if (this.group != null) {
-        this.group.removeChild(this);
+        this.group.removeMember(this);
     }
-    
+
     if (this.soundKill != null) {
         this.soundKill.play(true);
     }
+};
+
+/**
+ * Applies damage and destroys the entity when its health is depleted.
+ *
+ * @param {number} damage Amount of health to remove.
+ *
+ * @returns {undefined}
+ */
+rymdsten.entity.Body.prototype.hurt = function(damage) {
+    if (!this.alive) return;
+    this.health -= damage;
+    if (!this.alive) this.kill();
 };
 
 //------------------------------------------------------------------------------
@@ -77,7 +124,7 @@ rymdsten.entity.Body.prototype.kill = function() {
  * @inheritDoc
  */
 rymdsten.entity.Body.prototype.init = function() {
-    rune.physics.Body.prototype.init.call(this);
+    rune.display.Sprite.prototype.init.call(this);
     this.m_initHitbox();
     this.m_initPhysics();
     this.m_initAnimation();
@@ -87,7 +134,7 @@ rymdsten.entity.Body.prototype.init = function() {
  * @inheritDoc
  */
 rymdsten.entity.Body.prototype.update = function(step) {
-    rune.physics.Body.prototype.update.call(this, step);
+    rune.display.Sprite.prototype.update.call(this, step);
     this.m_updateBounds(step);
 };
 
@@ -98,7 +145,8 @@ rymdsten.entity.Body.prototype.update = function(step) {
 /**
  * Declares the physical size of the object.
  *
- * @return {undefined}
+ * @returns {undefined}
+ * @protected
  */
 rymdsten.entity.Body.prototype.m_initHitbox = function() {
     //@note: Override from child class.
@@ -107,7 +155,8 @@ rymdsten.entity.Body.prototype.m_initHitbox = function() {
 /**
  * Declares the physical conditions of the object.
  *
- * @return {undefined}
+ * @returns {undefined}
+ * @protected
  */
 rymdsten.entity.Body.prototype.m_initPhysics = function() {
     this.mass = 1.0;
@@ -118,7 +167,8 @@ rymdsten.entity.Body.prototype.m_initPhysics = function() {
 /**
  * Declares the object's animation.
  *
- * @return {undefined}
+ * @returns {undefined}
+ * @protected
  */
 rymdsten.entity.Body.prototype.m_initAnimation = function() {
     //@note: Override from child class.
@@ -131,10 +181,13 @@ rymdsten.entity.Body.prototype.m_initAnimation = function() {
 /**
  * Limits the object to within the screen area.
  *
- * @return {undefined}
+ * @param {number} step Elapsed time in milliseconds.
+ *
+ * @returns {undefined}
+ * @private
  */
 rymdsten.entity.Body.prototype.m_updateBounds = function(step) {
-    var camera = this.application.scenes.selected.cameras.getCamera(0);
+    var camera = this.application.scenes.selected.cameras.getCameraAt(0);
 
     // WIDTH
     if (this.left > camera.width) this.right = 0;

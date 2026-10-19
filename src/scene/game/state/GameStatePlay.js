@@ -10,7 +10,7 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * Game state.
  */
 rymdsten.scene.GameStatePlay = function() {
@@ -18,9 +18,9 @@ rymdsten.scene.GameStatePlay = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.state.State.
      */
     rune.state.State.call(this);
 };
@@ -59,14 +59,14 @@ rymdsten.scene.GameStatePlay.prototype.update = function(step) {
 /**
  * Creates and positions the player.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStatePlay.prototype.m_initPlayer = function() {
-    if (this.owner.ships.numChildren === 0) {
+    if (this.owner.ships.numMembers === 0) {
         this.owner.ships.create(
-        this.owner.application.screen.width  >> 1,
-        this.owner.application.screen.height >> 1
+            this.owner.application.screen.width  >> 1,
+            this.owner.application.screen.height >> 1
         );
     }
 };
@@ -74,11 +74,13 @@ rymdsten.scene.GameStatePlay.prototype.m_initPlayer = function() {
 /**
  * Checks the current state.
  *
- * @return {undefined}
+ * @param {number} step Elapsed time in milliseconds.
+ *
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStatePlay.prototype.m_updateStateRules = function(step) {
-    if (this.owner.ships.numChildren == 0) {
+    if (this.owner.ships.numMembers == 0) {
         this.owner.hud.lives--;
         if (this.owner.hud.lives > 0) {
             this.owner.application.scenes.selected.states.load([new rymdsten.scene.GameStateDead()]);

@@ -10,15 +10,15 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * The HUD.
  */
 rymdsten.ui.HUD = function() {
-    
+
     //--------------------------------------------------------------------------
     // Private properties
     //--------------------------------------------------------------------------
-    
+
     /**
      * Copyright text.
      *
@@ -26,7 +26,7 @@ rymdsten.ui.HUD = function() {
      * @private
      */
     this.m_copyright = null;
-    
+
     /**
      * Number of extra lives.
      *
@@ -34,11 +34,11 @@ rymdsten.ui.HUD = function() {
      * @private
      */
     this.m_extraLifeCounter = 0;
-    
+
     /**
      * Highscore handler.
      *
-     * @type {rune.ui.Highscore}
+     * @type {rymdsten.ui.Highscore}
      * @private
      */
     this.m_highscore = null;
@@ -58,15 +58,15 @@ rymdsten.ui.HUD = function() {
      * @private
      */
     this.m_score = null;
-    
+
     /**
      * Sound FX for extra life.
      *
-     * @type {number}
+     * @type {rune.media.Sound}
      * @private
      */
     this.m_soundExtra = this.application.sounds.sound.get("rymdsten_sound_ship_extra");
-    
+
     //--------------------------------------------------------------------------
     // Private constants
     //--------------------------------------------------------------------------
@@ -81,9 +81,9 @@ rymdsten.ui.HUD = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.display.DisplayObjectContainer.
      */
     rune.display.DisplayObjectContainer.call(this, 0, 0, 1280, 720, "");
 };
@@ -114,7 +114,7 @@ Object.defineProperty(rymdsten.ui.HUD.prototype, "lives", {
     get : function() {
         return this.m_lives.num;
     },
-    
+
     /**
      * @this rymdsten.ui.HUD
      * @ignore
@@ -127,7 +127,7 @@ Object.defineProperty(rymdsten.ui.HUD.prototype, "lives", {
 /**
  * Reference to the highscore handler.
  *
- * @member {rune.ui.Highscore} highscore
+ * @member {rymdsten.ui.Highscore} highscore
  * @memberof rymdsten.ui.HUD
  * @instance
  */
@@ -156,7 +156,7 @@ Object.defineProperty(rymdsten.ui.HUD.prototype, "score", {
     get : function() {
         return this.m_score.value;
     },
-    
+
     /**
      * @this rymdsten.ui.HUD
      * @ignore
@@ -181,7 +181,7 @@ Object.defineProperty(rymdsten.ui.HUD.prototype, "score", {
 /**
  * Reset HUD.
  *
- * @return {undefined}
+ * @returns {undefined}
  */
 rymdsten.ui.HUD.prototype.reset = function() {
     this.m_score.value = 0;
@@ -211,7 +211,7 @@ rymdsten.ui.HUD.prototype.init = function() {
 /**
  * Creates copyright text.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.ui.HUD.prototype.m_initCopyright = function() {
@@ -226,7 +226,7 @@ rymdsten.ui.HUD.prototype.m_initCopyright = function() {
 /**
  * Creates highscore handler.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.ui.HUD.prototype.m_initHighscore = function() {
@@ -241,7 +241,7 @@ rymdsten.ui.HUD.prototype.m_initHighscore = function() {
 /**
  * Creates score handler.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.ui.HUD.prototype.m_initScore = function() {
@@ -256,7 +256,7 @@ rymdsten.ui.HUD.prototype.m_initScore = function() {
 /**
  * Creates life handler.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.ui.HUD.prototype.m_initLives = function() {

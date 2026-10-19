@@ -8,17 +8,17 @@
  * @constructor
  * @extends rymdsten.entity.Body
  *
- * @param {number} [x=0] ...
- * @param {number} [y=0] ...
- * @param {number} [width=0] ...
- * @param {number} [height=0] ...
- * @param {number} [fillColor=0x0] ...
- * @param {string} [texture] ...
- * @param {string} [sound] ...
+ * @param {number} [x=0] Horizontal position in pixels.
+ * @param {number} [y=0] Vertical position in pixels.
+ * @param {number} [width=0] Width of the object in pixels.
+ * @param {number} [height=0] Height of the object in pixels.
+ * @param {string} [color=""] Value used by this operation.
+ * @param {string} [texture] Name of the texture resource.
+ * @param {string} [sound] Reserved sound argument; currently unused.
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents an asteroid.
  */
 rymdsten.entity.Asteroid = function(x, y, width, height, color, texture, sound) {
@@ -29,14 +29,14 @@ rymdsten.entity.Asteroid = function(x, y, width, height, color, texture, sound) 
 
     /**
      * Parts created when the asteroid is destroyed.
-     * 
+     *
      * @type {Array}
      */
     this.parts = [];
 
     /**
      * Indicates the value of the asteroid.
-     * 
+     *
      * @type {number}
      */
     this.score = 0;
@@ -56,9 +56,9 @@ rymdsten.entity.Asteroid = function(x, y, width, height, color, texture, sound) 
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rymdsten.entity.Body.
      */
     rymdsten.entity.Body.call(this, x, y, width, height, color, texture);
 };
@@ -81,7 +81,7 @@ rymdsten.entity.Asteroid.prototype.hurt = function(damage) {
     rymdsten.entity.Body.prototype.hurt.call(this, damage);
     if (this.health > 0) {
         this.m_soundHit.play(true);
-        this.flicker(500, 60);
+        this.flicker.start(500, 60);
     }
 };
 
@@ -89,16 +89,17 @@ rymdsten.entity.Asteroid.prototype.hurt = function(damage) {
  * @inheritDoc
  */
 rymdsten.entity.Asteroid.prototype.kill = function() {
+    this.health = 0;
     if (this.soundKill != null) {
         this.soundKill.play(true);
     }
-    
+
     if (this.group != null) {
         for (var i = 0; i < this.parts.length; i++) {
             this.group.create(this.x, this.y, this.parts[i]);
         }
-        
-        this.group.removeChild(this);
+
+        this.group.removeMember(this);
     }
 };
 
@@ -121,8 +122,8 @@ rymdsten.entity.Asteroid.prototype.init = function() {
  * @inheritDoc
  */
 rymdsten.entity.Asteroid.prototype.m_initAnimation = function() {
-    this.animations.add("idle", [0, 1, 2], 0, true);
-    this.animations.gotoRandomFrame();
+    this.animation.create("idle", [0, 1, 2], 0, true);
+    this.animation.gotoRandomFrame();
 };
 
 /**

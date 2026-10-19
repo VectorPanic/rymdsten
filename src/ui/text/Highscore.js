@@ -10,7 +10,7 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents highscore value.
  */
 rymdsten.ui.Highscore = function() {
@@ -18,16 +18,16 @@ rymdsten.ui.Highscore = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.text.BitmapField.
      */
     rune.text.BitmapField.call(this, "00", "rymdsten_texture_font_large_544x78");
-    
+
     //--------------------------------------------------------------------------
     // Override public properties
     //--------------------------------------------------------------------------
-    
+
     /**
      * @inheritDoc
      */
@@ -69,5 +69,5 @@ rymdsten.ui.Highscore.prototype.reload = function() {
  */
 rymdsten.ui.Highscore.prototype.init = function() {
     rune.text.BitmapField.prototype.init.call(this);
-    this.text = this.application.m_highscores.get(0, 0).score.toString();
+    this.text = this.application.highscores.get(0, 0).score.toString();
 };

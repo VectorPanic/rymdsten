@@ -10,7 +10,7 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * Game intro.
  */
 rymdsten.scene.GameStateIntro = function() {
@@ -26,7 +26,7 @@ rymdsten.scene.GameStateIntro = function() {
      * @private
      */
     this.m_controls = new rymdsten.util.Controls();
-    
+
     /**
      * Push start text.
      *
@@ -38,9 +38,9 @@ rymdsten.scene.GameStateIntro = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.state.State.
      */
     rune.state.State.call(this);
 };
@@ -90,7 +90,7 @@ rymdsten.scene.GameStateIntro.prototype.dispose = function() {
 /**
  * Reset ship.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateIntro.prototype.m_initShips = function() {
@@ -100,7 +100,7 @@ rymdsten.scene.GameStateIntro.prototype.m_initShips = function() {
 /**
  * Reset waves.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateIntro.prototype.m_initWaves = function() {
@@ -110,7 +110,7 @@ rymdsten.scene.GameStateIntro.prototype.m_initWaves = function() {
 /**
  * Reset attacks.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateIntro.prototype.m_initAttacks = function() {
@@ -120,14 +120,14 @@ rymdsten.scene.GameStateIntro.prototype.m_initAttacks = function() {
 /**
  * Creates "Push Start" text.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateIntro.prototype.m_initText = function() {
     if (this.m_text == null) {
         this.m_text = new rymdsten.ui.PushStart();
-        this.m_text.centerX = this.owner.cameras.getCamera(0).centerX;
-        this.m_text.centerY = this.owner.cameras.getCamera(0).centerY;
+        this.m_text.centerX = this.owner.cameras.getCameraAt(0).centerX;
+        this.m_text.centerY = this.owner.cameras.getCameraAt(0).centerY;
         this.owner.stage.addChild(this.m_text);
     }
 };
@@ -135,9 +135,9 @@ rymdsten.scene.GameStateIntro.prototype.m_initText = function() {
 /**
  * Handles input.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateIntro.prototype.m_updateInput = function(step) {
@@ -149,7 +149,7 @@ rymdsten.scene.GameStateIntro.prototype.m_updateInput = function(step) {
 /**
  * Deletes text.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateIntro.prototype.m_disposeText = function() {

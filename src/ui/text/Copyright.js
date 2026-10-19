@@ -10,7 +10,7 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents copyright text.
  */
 rymdsten.ui.Copyright = function() {
@@ -18,16 +18,16 @@ rymdsten.ui.Copyright = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.text.BitmapField.
      */
     rune.text.BitmapField.call(this, "[C] 2021 Overthinkers Inc");
-    
+
     //--------------------------------------------------------------------------
     // Override public properties
     //--------------------------------------------------------------------------
-    
+
     /**
      * @inheritDoc
      */

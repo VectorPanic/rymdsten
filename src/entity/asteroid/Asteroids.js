@@ -8,11 +8,11 @@
  * @constructor
  * @extends rune.display.DisplayGroup
  *
- * @param {rymdsten.scene.Game} game ...
+ * @param {rymdsten.scene.Game} game Game scene that owns this manager.
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents a handler responsible for asteroids.
  */
 rymdsten.entity.Asteroids = function(game) {
@@ -32,9 +32,9 @@ rymdsten.entity.Asteroids = function(game) {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.display.DisplayGroup.
      */
     rune.display.DisplayGroup.call(this, this.m_game.stage);
 };
@@ -78,11 +78,11 @@ rymdsten.entity.Asteroids.LARGE = "large";
 /**
  * Create a small, medium or large asteroid, in a certain position.
  *
- * @param {number} x ...
- * @param {number} y ...
- * @param {string} [type] ...
+ * @param {number} x Horizontal position in pixels.
+ * @param {number} y Vertical position in pixels.
+ * @param {string} [type] Size identifier of the object to create.
  *
- * @return {undefined}
+ * @returns {undefined}
  */
 rymdsten.entity.Asteroids.prototype.create = function(x, y, type) {
     var asteroid;
@@ -104,16 +104,16 @@ rymdsten.entity.Asteroids.prototype.create = function(x, y, type) {
     asteroid.centerX = x;
     asteroid.centerY = y;
 
-    this.addChild(asteroid);
+    this.addMember(asteroid);
 };
 
 /**
  * Resets all asteroids.
  *
- * @return {undefined}
+ * @returns {undefined}
  */
 rymdsten.entity.Asteroids.prototype.reset = function() {
-    this.removeChildren(true);
+    this.removeMembers(true);
 };
 
 //------------------------------------------------------------------------------
@@ -135,20 +135,20 @@ rymdsten.entity.Asteroids.prototype.update = function(step) {
 /**
  * Check if an asteroid collides with a game object.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.entity.Asteroids.prototype.m_updateCollision = function(step) {
-    
+
     // SHIP BULLETS
     this.hitTestGroup(
         this.m_game.ships.bullets,
         this.m_onShipBulletCollision,
         this
     );
-    
+
     // SAUCER BULLETS
     this.hitTestGroup(
         this.m_game.attacks.saucers.bullets,
@@ -160,14 +160,14 @@ rymdsten.entity.Asteroids.prototype.m_updateCollision = function(step) {
 /**
  * When an asteroid collides with a bullet from the ship.
  *
- * @param {rymdsten.entity.Bullet} bullet ...
- * @param {rymdsten.entity.Asteroid} asteroid ...
+ * @param {rymdsten.entity.Asteroid} asteroid Asteroid involved in the collision.
+ * @param {rymdsten.entity.Bullet} bullet Bullet involved in the collision.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
-rymdsten.entity.Asteroids.prototype.m_onShipBulletCollision = function(bullet, asteroid) {
-    this.m_onSaucerBulletCollision(bullet, asteroid);
+rymdsten.entity.Asteroids.prototype.m_onShipBulletCollision = function(asteroid, bullet) {
+    this.m_onSaucerBulletCollision(asteroid, bullet);
     if (asteroid.alive == false) {
         this.m_game.hud.score += asteroid.score;
     }
@@ -176,17 +176,17 @@ rymdsten.entity.Asteroids.prototype.m_onShipBulletCollision = function(bullet, a
 /**
  * When an asteroid collides with a bullet from a saucer.
  *
- * @param {rymdsten.entity.Bullet} bullet ...
- * @param {rymdsten.entity.Asteroid} asteroid ...
+ * @param {rymdsten.entity.Asteroid} asteroid Asteroid involved in the collision.
+ * @param {rymdsten.entity.Bullet} bullet Bullet involved in the collision.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
-rymdsten.entity.Asteroids.prototype.m_onSaucerBulletCollision = function(bullet, asteroid) {
+rymdsten.entity.Asteroids.prototype.m_onSaucerBulletCollision = function(asteroid, bullet) {
     asteroid.velocity.add(bullet.velocity);
     asteroid.velocity.divide(asteroid.mass * 2);
     asteroid.hurt(bullet.damage);
     if (bullet.group != null) {
-        bullet.group.removeChild(bullet);
+        bullet.group.removeMember(bullet);
     }
 };

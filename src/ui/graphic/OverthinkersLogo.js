@@ -10,23 +10,23 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * Overthinkers logo.
  */
 rymdsten.ui.OverthinkersLogo = function() {
 
     //--------------------------------------------------------------------------
-    //  Constructor call
+    // Constructor call
     //--------------------------------------------------------------------------
-    
+
     /**
-     *  ...
+     *  Extend rune.display.Graphic.
      */
-    rune.display.Graphic.call(this, 0, 0, 395, 60, "", "rymdsten_texture_overthinkers_395x60");
+    rune.display.Graphic.call(this, 0, 0, 395, 60, "rymdsten_texture_overthinkers_395x60");
 };
 
 //------------------------------------------------------------------------------
-//  Inheritance
+// Inheritance
 //------------------------------------------------------------------------------
 
 rymdsten.ui.OverthinkersLogo.prototype = Object.create(rune.display.Graphic.prototype);

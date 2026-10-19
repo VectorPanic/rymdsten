@@ -7,11 +7,11 @@
  *
  * @constructor
  *
- * @param {rymdsten.scene.Game} game ...
+ * @param {rymdsten.scene.Game} game Game scene that owns this manager.
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents a wave handler.
  */
 rymdsten.wave.Waves = function(game) {
@@ -19,18 +19,18 @@ rymdsten.wave.Waves = function(game) {
     //--------------------------------------------------------------------------
     // Private properties
     //--------------------------------------------------------------------------
-    
+
     /**
      * Reference to the asteroid handler.
-     * 
+     *
      * @type {rymdsten.entity.Asteroids}
      * @private
      */
     this.m_asteroids = null;
-    
+
     /**
      * Current wave index.
-     * 
+     *
      * @type {number}
      * @private
      */
@@ -39,32 +39,32 @@ rymdsten.wave.Waves = function(game) {
     /**
      * Reference to the game scene.
      *
-     * @type {rymdsten.entity.Asteroids}
+     * @type {rymdsten.scene.Game}
      * @private
      */
     this.m_game = game;
-    
+
     /**
      * List of waves (Wave).
-     * 
+     *
      * @type {Array.<rymdsten.wave.Wave>}
      * @private
      */
     this.m_waves = [];
-    
+
     /**
      * Positions where asteroids can be created.
-     * 
+     *
      * @type {rune.geom.Point}
      */
     this.m_spawnPoint = new rune.geom.Point();
-    
+
     //--------------------------------------------------------------------------
     // Constructor call
     //--------------------------------------------------------------------------
 
     /**
-     * ...
+     * Construct the required subsystems.
      */
     this.m_construct();
 };
@@ -97,12 +97,12 @@ Object.defineProperty(rymdsten.wave.Waves.prototype, "asteroids", {
 
 /**
  * Add new wave.
- * 
- * @param {rymdsten.wave.Wave} wave ...
  *
- * @throws {TypeError} ...
+ * @param {rymdsten.wave.Wave} wave Wave definition to append.
  *
- * @return {undefined}
+ * @throws {TypeError} If the argument is not a wave definition.
+ *
+ * @returns {undefined}
  */
 rymdsten.wave.Waves.prototype.add = function(wave) {
     if (wave instanceof rymdsten.wave.Wave) {
@@ -112,10 +112,10 @@ rymdsten.wave.Waves.prototype.add = function(wave) {
 
 /**
  * Load a wave.
- * 
- * @param {number} index ...
  *
- * @return {undefined}
+ * @param {number} index Zero-based index of the wave to load.
+ *
+ * @returns {undefined}
  */
 rymdsten.wave.Waves.prototype.load = function(index) {
     this.reset();
@@ -126,7 +126,7 @@ rymdsten.wave.Waves.prototype.load = function(index) {
 /**
  * Skip to next wave.
  *
- * @return {undefined}
+ * @returns {undefined}
  */
 rymdsten.wave.Waves.prototype.next = function() {
     this.m_current++;
@@ -140,7 +140,7 @@ rymdsten.wave.Waves.prototype.next = function() {
 /**
  * Go to previous wave.
  *
- * @return {undefined}
+ * @returns {undefined}
  */
 rymdsten.wave.Waves.prototype.previous = function() {
     this.m_current--;
@@ -154,12 +154,12 @@ rymdsten.wave.Waves.prototype.previous = function() {
 /**
  * Reset wave.
  *
- * @return {undefined}
+ * @returns {undefined}
  */
 rymdsten.wave.Waves.prototype.reset = function() {
     this.m_current = -1;
     if (this.m_asteroids) {
-        this.m_asteroids.removeChildren();
+        this.m_asteroids.removeMembers();
     }
 };
 
@@ -170,12 +170,27 @@ rymdsten.wave.Waves.prototype.reset = function() {
 /**
  * Update waves.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @return {undefined}
+ * @returns {undefined}
  */
 rymdsten.wave.Waves.prototype.update = function(step) {
     this.m_updateWave(step);
+};
+
+/**
+ * Releases the wave definitions, spawn point and scene-owned asteroid group.
+ *
+ * @returns {undefined}
+ */
+rymdsten.wave.Waves.prototype.dispose = function() {
+    if (this.m_asteroids != null) {
+        this.m_game.groups.remove(this.m_asteroids, true);
+        this.m_asteroids = null;
+    }
+    this.m_waves = [];
+    this.m_spawnPoint = null;
+    this.m_game = null;
 };
 
 //------------------------------------------------------------------------------
@@ -185,7 +200,7 @@ rymdsten.wave.Waves.prototype.update = function(step) {
 /**
  * Class constructor.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @protected
  */
 rymdsten.wave.Waves.prototype.m_construct = function() {
@@ -199,7 +214,7 @@ rymdsten.wave.Waves.prototype.m_construct = function() {
 /**
  * Creates the handler for asteroids.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.wave.Waves.prototype.m_constructAsteroids = function() {
@@ -214,14 +229,14 @@ rymdsten.wave.Waves.prototype.m_constructAsteroids = function() {
 /**
  * Check whether the next wave should start.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.wave.Waves.prototype.m_updateWave = function(step) {
-    if (this.m_asteroids.numChildren == 0 && this.m_current != -1) {
-        if (this.m_game.attacks.saucers.numChildren == 0) {
+    if (this.m_asteroids.numMembers == 0 && this.m_current != -1) {
+        if (this.m_game.attacks.saucers.numMembers == 0) {
             this.m_game.attacks.reset();
             this.next();
         }
@@ -231,7 +246,7 @@ rymdsten.wave.Waves.prototype.m_updateWave = function(step) {
 /**
  * Remove the asteroid handler.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.wave.Waves.prototype.m_disposeAsteroids = function() {
@@ -244,27 +259,27 @@ rymdsten.wave.Waves.prototype.m_disposeAsteroids = function() {
 /**
  * Load asteroids in current wave.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.wave.Waves.prototype.m_loadAsteroids = function() {
-    this.m_asteroids.removeChildren(true);
+    this.m_asteroids.removeMembers(true);
     for (var i = 0; i < this.m_waves[this.m_current].m_asteroids.length; i++) {
         this.m_updateSpawnPoint();
         this.m_asteroids.create(this.m_spawnPoint.x, this.m_spawnPoint.y, this.m_waves[this.m_current].m_asteroids[i]);
-    } 
+    }
 };
 
 /**
  * Set random spawn point.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.wave.Waves.prototype.m_updateSpawnPoint = function() {
-    var w = rune.system.Main.instance.screen.width;
-    var h = rune.system.Main.instance.screen.height;
-    
+    var w = rune.system.Application.instance.screen.width;
+    var h = rune.system.Application.instance.screen.height;
+
     if (rune.util.Math.chance(50)) {
         this.m_spawnPoint.y = (rune.util.Math.chance(50)) ? 0 : h;
         this.m_spawnPoint.x = rune.util.Math.random(0, w);

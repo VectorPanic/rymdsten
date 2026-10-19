@@ -6,43 +6,43 @@
  * Creates a new object.
  *
  * @constructor
- * @extends rune.scene.Scene
+ * @extends rymdsten.entity.Body
  *
- * @param {number} width ...
- * @param {number} height ...
- * @param {string} texture ...
- * @param {rymdsten.entity.Saucers} saucers ...
+ * @param {number} width Width of the object in pixels.
+ * @param {number} height Height of the object in pixels.
+ * @param {string} texture Name of the texture resource.
+ * @param {rymdsten.entity.Saucers} saucers Group that owns the saucer.
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents a large saucer.
  */
 rymdsten.entity.Saucer = function(width, height, texture, saucers) {
-    
+
     //--------------------------------------------------------------------------
     // Public properties
     //--------------------------------------------------------------------------
-    
+
     /**
      * Delay between attacks.
-     * 
+     *
      * @type {number}
      * @default 0
      */
     this.attack = 0;
-    
+
     /**
      * Precision for fired bullets.
-     * 
+     *
      * @type {number}
      * @default 0
      */
     this.aiming = 0;
-    
+
     /**
      * Continuous sound.
-     * 
+     *
      * @type {rune.media.Sound}
      * @default 0
      */
@@ -50,42 +50,42 @@ rymdsten.entity.Saucer = function(width, height, texture, saucers) {
 
     /**
      * The value of the object.
-     * 
+     *
      * @type {number}
      * @default 0
      */
     this.score = 0;
-    
+
     /**
      * Object speed.
-     * 
+     *
      * @type {number}
      * @default 0.5
      */
     this.speed = 0.5;
-    
+
     /**
      * Targeting delay.
-     * 
+     *
      * @type {number}
      * @default 2000
      */
     this.targeting = 2000;
-    
+
     //--------------------------------------------------------------------------
     // Private properties
     //--------------------------------------------------------------------------
-    
+
     /**
      * Attack counter.
-     * 
+     *
      * @type {number}
      */
     this.m_attack = 0;
-    
+
     /**
      * Movement tracker.
-     * 
+     *
      * @type {rune.geom.Point}
      */
     this.m_movement = new rune.geom.Point(0, 0);
@@ -97,7 +97,7 @@ rymdsten.entity.Saucer = function(width, height, texture, saucers) {
      * @private
      */
     this.m_saucers = saucers;
-    
+
     /**
      * Targeting counter.
      *
@@ -109,16 +109,16 @@ rymdsten.entity.Saucer = function(width, height, texture, saucers) {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rymdsten.entity.Body.
      */
     rymdsten.entity.Body.call(this, 0, 0, width, height, "", texture);
-    
+
     //--------------------------------------------------------------------------
     // Override public properties
     //--------------------------------------------------------------------------
-    
+
     /**
      * @inheritDoc
      */
@@ -126,7 +126,7 @@ rymdsten.entity.Saucer = function(width, height, texture, saucers) {
 };
 
 //--------------------------------------------------------------------------
-//  Inheritance
+// Inheritance
 //--------------------------------------------------------------------------
 
 rymdsten.entity.Saucer.prototype = Object.create(rymdsten.entity.Body.prototype);
@@ -143,18 +143,16 @@ rymdsten.entity.Saucer.prototype.constructor = rymdsten.entity.Saucer;
  */
 rymdsten.entity.Saucer.prototype.fire = function() {
     if (this.m_saucers != null) {
-        if (this.m_saucers.game.ships.numChildren > 0) {
+        if (this.m_saucers.game.ships.numMembers > 0) {
             var bullet = this.m_saucers.bullets.create(this.centerX, this.centerY);
-                bullet.velocity.x = (this.m_movement.x == 2) ? this.speed : -this.speed;
-                bullet.velocity.y = (this.m_movement.y == 2) ? this.speed : -this.speed;
-                bullet.rotation = rune.geom.Point.bearing(
-                  this.centerX,
-                  this.centerY,
-                  this.m_saucers.game.ships.getChildAt(0).centerX,
-                  this.m_saucers.game.ships.getChildAt(0).centerY
-                );
-                
-            bullet.rotation += rune.util.Math.random(-this.aiming, this.aiming);          
+            bullet.velocity.x = (this.m_movement.x == 2) ? this.speed : -this.speed;
+            bullet.velocity.y = (this.m_movement.y == 2) ? this.speed : -this.speed;
+            var target = this.m_saucers.game.ships.getMemberAt(0);
+            bullet.rotation = rune.util.Math.radiansToDegrees(Math.atan2(
+                target.centerY - this.centerY,
+                target.centerX - this.centerX
+            ));
+            bullet.rotation += rune.util.Math.random(-this.aiming, this.aiming);
         }
     }
 };
@@ -162,37 +160,49 @@ rymdsten.entity.Saucer.prototype.fire = function() {
 /**
  * Move down.
  *
- * @return {undefined}
+ * @param {number} [step=1000/60] Elapsed time in milliseconds.
+ *
+ * @returns {undefined}
  */
-rymdsten.entity.Saucer.prototype.moveDown = function() {
-    this.y += this.speed;
+rymdsten.entity.Saucer.prototype.moveDown = function(step) {
+    step = step === undefined ? 1000 / 60 : step;
+    this.y += this.speed * step / (1000 / 60);
 };
 
 /**
  * Move left.
  *
- * @return {undefined}
+ * @param {number} [step=1000/60] Elapsed time in milliseconds.
+ *
+ * @returns {undefined}
  */
-rymdsten.entity.Saucer.prototype.moveLeft = function() {
-    this.x -= this.speed;
+rymdsten.entity.Saucer.prototype.moveLeft = function(step) {
+    step = step === undefined ? 1000 / 60 : step;
+    this.x -= this.speed * step / (1000 / 60);
 };
 
 /**
  * Move right.
  *
- * @return {undefined}
+ * @param {number} [step=1000/60] Elapsed time in milliseconds.
+ *
+ * @returns {undefined}
  */
-rymdsten.entity.Saucer.prototype.moveRight = function() {
-    this.x += this.speed;
+rymdsten.entity.Saucer.prototype.moveRight = function(step) {
+    step = step === undefined ? 1000 / 60 : step;
+    this.x += this.speed * step / (1000 / 60);
 };
 
 /**
  * Move up.
  *
- * @return {undefined}
+ * @param {number} [step=1000/60] Elapsed time in milliseconds.
+ *
+ * @returns {undefined}
  */
-rymdsten.entity.Saucer.prototype.moveUp = function() {
-    this.y -= this.speed;
+rymdsten.entity.Saucer.prototype.moveUp = function(step) {
+    step = step === undefined ? 1000 / 60 : step;
+    this.y -= this.speed * step / (1000 / 60);
 };
 
 //------------------------------------------------------------------------------
@@ -228,66 +238,70 @@ rymdsten.entity.Saucer.prototype.update = function(step) {
 //------------------------------------------------------------------------------
 
 /**
- * Calculate motion. 
+ * Calculate motion.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @return {undefined}
+ * @returns {undefined}
+ * @private
  */
 rymdsten.entity.Saucer.prototype.m_updateMovement = function(step) {
     if (this.targeting > 0) {
-        
+
         this.m_targeting -= step;
-        
-        if (this.m_targeting < 0) {
-            this.m_targeting = this.targeting;
+
+        while (this.m_targeting < -0.000001) {
+            this.m_targeting += this.targeting;
             this.m_updateMovementDirections(step);
         }
-        
-        if      (this.m_movement.x == 1) this.moveLeft();
-        else if (this.m_movement.x == 2) this.moveRight();
-        
-        if      (this.m_movement.y == 1) this.moveUp();
-        else if (this.m_movement.y == 2) this.moveDown();
+
+        if      (this.m_movement.x == 1) this.moveLeft(step);
+        else if (this.m_movement.x == 2) this.moveRight(step);
+
+        if      (this.m_movement.y == 1) this.moveUp(step);
+        else if (this.m_movement.y == 2) this.moveDown(step);
     }
 };
 
 /**
  * Calculate direction.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @return {undefined}
+ * @returns {undefined}
+ * @private
  */
 rymdsten.entity.Saucer.prototype.m_updateMovementDirections = function(step) {
     //@note: Override from child class.
 };
 
 /**
- * Calculate attack. 
+ * Calculate attack.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @return {undefined}
+ * @returns {undefined}
+ * @private
  */
 rymdsten.entity.Saucer.prototype.m_updateAttack = function(step) {
     if (this.attack > 0) {
-        
+
         this.m_attack -= step;
-        
-        if (this.m_attack < 0) {
-            this.m_attack = this.attack;
+
+        while (this.m_attack < -0.000001) {
+            this.m_attack += this.attack;
             this.fire();
-        }   
+        }
     }
 };
 
 /**
  * Play sound.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @return {undefined}
+ * @returns {undefined}
+ * @private
  */
 rymdsten.entity.Saucer.prototype.m_updateBeat = function(step) {
     if (this.beat != null) {

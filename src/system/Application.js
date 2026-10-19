@@ -6,28 +6,28 @@
  * Creates a new object.
  *
  * @constructor
- * @extends rune.system.Main
- * 
+ * @extends rune.system.Application
+ *
  * @class
  * @classdesc
- * 
+ *
  * The main application class.
  */
-rymdsten.system.Main = function() {
+rymdsten.system.Application = function() {
 
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.system.Application.
      */
-    rune.system.Main.call(this, {
-        name: "Rymdsten",
-        version: "1.0.0",
-        id: "com.vectorpanic.rymdsten",
+    rune.system.Application.call(this, {
+        app: "rymdsten",
+        build: "1.0.0",
+        developer: "com.vectorpanic",
         scene: rymdsten.scene.Splash,
-        resources: rymdsten.data.Manifest,
+        resources: rymdsten.data.Requests,
         debug: false,
         useKeyboard: true,
         useGamepads: true,
@@ -41,5 +41,5 @@ rymdsten.system.Main = function() {
 // Inheritance
 //------------------------------------------------------------------------------
 
-rymdsten.system.Main.prototype = Object.create(rune.system.Main.prototype);
-rymdsten.system.Main.prototype.constructor = rymdsten.system.Main;
+rymdsten.system.Application.prototype = Object.create(rune.system.Application.prototype);
+rymdsten.system.Application.prototype.constructor = rymdsten.system.Application;

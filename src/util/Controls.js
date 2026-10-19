@@ -7,9 +7,11 @@
  *
  * @constructor
  *
+ * @param {number} [playerID=0] Zero-based player input index.
+ *
  * @class
  * @classdesc
- * 
+ *
  * Represents a manager for keyboard and gamepad input.
  */
 rymdsten.util.Controls = function(playerID) {
@@ -29,22 +31,22 @@ rymdsten.util.Controls = function(playerID) {
     /**
      * Gamepad handler.
      *
-     * @type {number}
+     * @type {rymdsten.util.GamepadMapping}
      * @private
      */
-    this.m_gamepad = new rymdsten.util.MappingGamepad(this.m_playerID);
+    this.m_gamepad = new rymdsten.util.GamepadMapping(this.m_playerID);
 
     /**
      * Keyboard handler.
      *
-     * @type {number}
+     * @type {rymdsten.util.KeyboardMapping}
      * @private
      */
-    this.m_keyboard = new rymdsten.util.MappingKeyboard(this.m_playerID);
+    this.m_keyboard = new rymdsten.util.KeyboardMapping(this.m_playerID);
 };
 
 //--------------------------------------------------------------------------
-// Public getter and setter methods
+// Public prototype getter and setter methods
 //--------------------------------------------------------------------------
 
 /**
@@ -52,6 +54,7 @@ rymdsten.util.Controls = function(playerID) {
  *
  * @member {boolean} up
  * @memberof rymdsten.util.Controls
+ * @instance
  * @readonly
  */
 Object.defineProperty(rymdsten.util.Controls.prototype, "up", {
@@ -69,6 +72,7 @@ Object.defineProperty(rymdsten.util.Controls.prototype, "up", {
  *
  * @member {boolean} right
  * @memberof rymdsten.util.Controls
+ * @instance
  * @readonly
  */
 Object.defineProperty(rymdsten.util.Controls.prototype, "right", {
@@ -86,6 +90,7 @@ Object.defineProperty(rymdsten.util.Controls.prototype, "right", {
  *
  * @member {boolean} left
  * @memberof rymdsten.util.Controls
+ * @instance
  * @readonly
  */
 Object.defineProperty(rymdsten.util.Controls.prototype, "left", {
@@ -103,6 +108,7 @@ Object.defineProperty(rymdsten.util.Controls.prototype, "left", {
  *
  * @member {boolean} fire
  * @memberof rymdsten.util.Controls
+ * @instance
  * @readonly
  */
 Object.defineProperty(rymdsten.util.Controls.prototype, "fire", {
@@ -120,6 +126,7 @@ Object.defineProperty(rymdsten.util.Controls.prototype, "fire", {
  *
  * @member {boolean} hyperspace
  * @memberof rymdsten.util.Controls
+ * @instance
  * @readonly
  */
 Object.defineProperty(rymdsten.util.Controls.prototype, "hyperspace", {
@@ -131,3 +138,22 @@ Object.defineProperty(rymdsten.util.Controls.prototype, "hyperspace", {
         return (this.m_keyboard.hyperspace || this.m_gamepad.hyperspace);
     }
 });
+
+//------------------------------------------------------------------------------
+// Public prototype methods (API)
+//------------------------------------------------------------------------------
+
+/**
+ * Vibrates the current player's gamepad when its device supports feedback.
+ *
+ * @param {number} duration Duration in milliseconds; zero stops vibration.
+ * @param {number} [weak=1.0] Weak motor intensity from zero to one.
+ * @param {number} [strong=1.0] Strong motor intensity from zero to one.
+ *
+ * @returns {undefined}
+ */
+rymdsten.util.Controls.prototype.vibrate = function(duration, weak, strong) {
+    rune.system.Application.instance.inputs.gamepads.get(this.m_playerID).vibrate(
+        duration, 0, weak, strong
+    );
+};

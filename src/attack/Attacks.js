@@ -7,57 +7,57 @@
  *
  * @constructor
  *
- * @param {rymdsten.scene.Game} game ...
+ * @param {rymdsten.scene.Game} game Game scene that owns this manager.
  *
  * @class
  * @classdesc
- * 
- * ...
+ *
+ * Manages saucer attacks and the delay between enemy spawns.
  */
 rymdsten.attack.Attacks = function(game) {
 
     //--------------------------------------------------------------------------
     // Private properties
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Whether saucer attacks are enabled.
      *
      * @type {boolean}
      * @private
      */
     this.m_active = false;
-    
+
     /**
-     * ...
+     * Reference to the game scene.
      *
-     * @type {rymdsten.entity.Asteroids}
+     * @type {rymdsten.scene.Game}
      * @private
      */
     this.m_game = game;
-    
+
     /**
-     * ...
+     * Handler for the attacking saucers.
      *
      * @type {rymdsten.entity.Saucers}
      * @private
      */
     this.m_saucers = null;
-    
+
     /**
-     * ...
+     * Milliseconds remaining until the next saucer attack.
      *
      * @type {number}
      * @private
      */
     this.m_ticker = 0;
-    
+
     //--------------------------------------------------------------------------
     // Constructor call
     //--------------------------------------------------------------------------
 
     /**
-     * ...
+     * Construct the required subsystems.
      */
     this.m_construct();
 };
@@ -67,7 +67,7 @@ rymdsten.attack.Attacks = function(game) {
 //------------------------------------------------------------------------------
 
 /**
- * ...
+ * Managed saucer group.
  *
  * @member {rymdsten.entity.Saucers} saucers
  * @memberof rymdsten.attack.Attacks
@@ -89,22 +89,22 @@ Object.defineProperty(rymdsten.attack.Attacks.prototype, "saucers", {
 //------------------------------------------------------------------------------
 
 /**
- * ...
- * 
- * @return {undefined}
+ * Resets the managed objects and prepares them for a new game.
+ *
+ * @returns {undefined}
  */
 rymdsten.attack.Attacks.prototype.reset = function() {
     if (this.m_saucers != null) {
         this.m_saucers.reset();
     }
-    
+
     this.m_resetTicker();
 };
 
 /**
- * ...
- * 
- * @return {undefined}
+ * Enables saucer attacks and resets the spawn timer.
+ *
+ * @returns {undefined}
  */
 rymdsten.attack.Attacks.prototype.start = function() {
     if (this.m_active != true) {
@@ -114,9 +114,9 @@ rymdsten.attack.Attacks.prototype.start = function() {
 };
 
 /**
- * ...
- * 
- * @return {undefined}
+ * Disables new saucer attacks.
+ *
+ * @returns {undefined}
  */
 rymdsten.attack.Attacks.prototype.stop = function() {
     if (this.m_active != false) {
@@ -129,14 +129,28 @@ rymdsten.attack.Attacks.prototype.stop = function() {
 //------------------------------------------------------------------------------
 
 /**
- * ...
+ * Updates the manager for the current frame.
  *
- * @param {number} step ...
- * 
- * @return {undefined}
+ * @param {number} step Elapsed time in milliseconds.
+ *
+ * @returns {undefined}
  */
 rymdsten.attack.Attacks.prototype.update = function(step) {
     this.m_updateTicker(step);
+};
+
+/**
+ * Releases the attack manager and its scene-owned saucer group.
+ *
+ * @returns {undefined}
+ */
+rymdsten.attack.Attacks.prototype.dispose = function() {
+    this.stop();
+    if (this.m_saucers != null) {
+        this.m_game.groups.remove(this.m_saucers, true);
+        this.m_saucers = null;
+    }
+    this.m_game = null;
 };
 
 //------------------------------------------------------------------------------
@@ -144,9 +158,9 @@ rymdsten.attack.Attacks.prototype.update = function(step) {
 //------------------------------------------------------------------------------
 
 /**
- * ...
+ * Constructs the manager and its required subsystems.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @protected
  */
 rymdsten.attack.Attacks.prototype.m_construct = function() {
@@ -158,9 +172,9 @@ rymdsten.attack.Attacks.prototype.m_construct = function() {
 //------------------------------------------------------------------------------
 
 /**
- * ...
- * 
- * @return {undefined}
+ * Creates and registers the scene's saucer group.
+ *
+ * @returns {undefined}
  * @private
  */
 rymdsten.attack.Attacks.prototype.m_constructSaucers = function() {
@@ -173,18 +187,18 @@ rymdsten.attack.Attacks.prototype.m_constructSaucers = function() {
 };
 
 /**
- * ...
+ * Spawns a saucer when the attack delay and score requirements are met.
  *
- * @param {number} step ...
- * 
- * @return {undefined}
+ * @param {number} step Elapsed time in milliseconds.
+ *
+ * @returns {undefined}
  * @private
  */
 rymdsten.attack.Attacks.prototype.m_updateTicker = function(step) {
     if (this.m_active == true && this.m_saucers != null && this.m_game.hud.score > 5000) { //@note: Magic number.
-        if (this.m_saucers.numChildren == 0 && this.m_game.ships.numChildren > 0) {
+        if (this.m_saucers.numMembers == 0 && this.m_game.ships.numMembers > 0) {
             this.m_ticker -= step;
-            
+
             if (this.m_ticker < 0) {
                 this.m_resetTicker();
                 this.m_saucers.create(
@@ -198,9 +212,9 @@ rymdsten.attack.Attacks.prototype.m_updateTicker = function(step) {
 };
 
 /**
- * ...
- * 
- * @return {undefined}
+ * Chooses a new random delay before the next saucer attack.
+ *
+ * @returns {undefined}
  * @private
  */
 rymdsten.attack.Attacks.prototype.m_resetTicker = function() {
@@ -208,9 +222,9 @@ rymdsten.attack.Attacks.prototype.m_resetTicker = function() {
 };
 
 /**
- * ...
- * 
- * @return {undefined}
+ * Disposes the managed saucer group.
+ *
+ * @returns {undefined}
  * @private
  */
 rymdsten.attack.Attacks.prototype.m_disposeSaucers = function() {
@@ -221,9 +235,9 @@ rymdsten.attack.Attacks.prototype.m_disposeSaucers = function() {
 };
 
 /**
- * ...
- * 
- * @return {undefined}
+ * Selects the saucer class or size used for the next spawn.
+ *
+ * @returns {string}
  * @private
  */
 rymdsten.attack.Attacks.prototype.m_getType = function() {
@@ -235,6 +249,6 @@ rymdsten.attack.Attacks.prototype.m_getType = function() {
     } else {
         type = rymdsten.entity.Saucers.SMALL;
     }
-    
+
     return type;
 };

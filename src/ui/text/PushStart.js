@@ -10,7 +10,7 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents push start text.
  */
 rymdsten.ui.PushStart = function() {
@@ -18,16 +18,16 @@ rymdsten.ui.PushStart = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.text.BitmapField.
      */
     rune.text.BitmapField.call(this, "push start", "rymdsten_texture_font_large_544x78");
-    
+
     //--------------------------------------------------------------------------
     // Override public properties
     //--------------------------------------------------------------------------
-    
+
     /**
      * @inheritDoc
      */
@@ -50,5 +50,5 @@ rymdsten.ui.PushStart.prototype.constructor = rymdsten.ui.PushStart;
  */
 rymdsten.ui.PushStart.prototype.init = function() {
     rune.text.BitmapField.prototype.init.call(this);
-    this.flicker(Infinity, 1000);
+    this.flicker.start(Infinity, 1000);
 };

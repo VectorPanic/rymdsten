@@ -10,7 +10,7 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * Starts a new game round.
  */
 rymdsten.scene.GameStateStart = function() {
@@ -18,9 +18,9 @@ rymdsten.scene.GameStateStart = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.state.State.
      */
     rune.state.State.call(this);
 };
@@ -62,7 +62,7 @@ rymdsten.scene.GameStateStart.prototype.update = function(step) {
 /**
  * Resets the HUD.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateStart.prototype.m_initHUD = function() {
@@ -72,7 +72,7 @@ rymdsten.scene.GameStateStart.prototype.m_initHUD = function() {
 /**
  * Resets waves.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateStart.prototype.m_initWaves = function() {
@@ -82,14 +82,14 @@ rymdsten.scene.GameStateStart.prototype.m_initWaves = function() {
 /**
  * Creates and positions the player.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateStart.prototype.m_initShips = function() {
-    if (this.owner.ships.numChildren === 0) {
+    if (this.owner.ships.numMembers === 0) {
         this.owner.ships.create(
-        this.owner.application.screen.width  >> 1,
-        this.owner.application.screen.height >> 1
+            this.owner.application.screen.width  >> 1,
+            this.owner.application.screen.height >> 1
         );
     }
 };
@@ -97,7 +97,7 @@ rymdsten.scene.GameStateStart.prototype.m_initShips = function() {
 /**
  * Activates attacks.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateStart.prototype.m_initAttacks = function() {
@@ -107,11 +107,13 @@ rymdsten.scene.GameStateStart.prototype.m_initAttacks = function() {
 /**
  * Checks the current state.
  *
- * @return {undefined}
+ * @param {number} step Elapsed time in milliseconds.
+ *
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateStart.prototype.m_updateStateRules = function(step) {
-    if (this.owner.ships.numChildren == 0) {
+    if (this.owner.ships.numMembers == 0) {
         this.owner.hud.lives--;
         if (this.owner.hud.lives > 0) {
             this.owner.application.scenes.selected.states.load([new rymdsten.scene.GameStateDead()]);

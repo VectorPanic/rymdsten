@@ -10,7 +10,7 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents a life.
  */
 rymdsten.ui.Life = function() {
@@ -18,15 +18,15 @@ rymdsten.ui.Life = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.display.Graphic.
      */
-    rune.display.Graphic.call(this, 0, 0, 30, 18, "", "rymdsten_texture_ship_30x18");
+    rune.display.Graphic.call(this, 0, 0, 30, 18, "rymdsten_texture_ship_30x18");
 };
 
 //------------------------------------------------------------------------------
-//  Inheritance
+// Inheritance
 //------------------------------------------------------------------------------
 
 rymdsten.ui.Life.prototype = Object.create(rune.display.Graphic.prototype);

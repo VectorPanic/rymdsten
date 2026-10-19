@@ -7,12 +7,14 @@
  *
  * @constructor
  *
+ * @param {number} [playerID=0] Zero-based player input index.
+ *
  * @class
  * @classdesc
- * 
+ *
  * Keyboard mapping.
  */
-rymdsten.util.MappingKeyboard = function(playerID) {
+rymdsten.util.KeyboardMapping = function(playerID) {
 
     //--------------------------------------------------------------------------
     // Private properties
@@ -29,7 +31,7 @@ rymdsten.util.MappingKeyboard = function(playerID) {
     /**
      * UP.
      *
-     * @type {array}
+     * @type {Array.<string>}
      * @private
      */
     this.m_up = ["W"];
@@ -37,7 +39,7 @@ rymdsten.util.MappingKeyboard = function(playerID) {
     /**
      * Right.
      *
-     * @type {array}
+     * @type {Array.<string>}
      * @private
      */
     this.m_right = ["D"];
@@ -45,7 +47,7 @@ rymdsten.util.MappingKeyboard = function(playerID) {
     /**
      * Left.
      *
-     * @type {array}
+     * @type {Array.<string>}
      * @private
      */
     this.m_left = ["A"];
@@ -53,7 +55,7 @@ rymdsten.util.MappingKeyboard = function(playerID) {
     /**
      * Fire.
      *
-     * @type {array}
+     * @type {Array.<string>}
      * @private
      */
     this.m_fire = ["SPACE"];
@@ -61,30 +63,31 @@ rymdsten.util.MappingKeyboard = function(playerID) {
     /**
      * Hyperspace.
      *
-     * @type {array}
+     * @type {Array.<string>}
      * @private
      */
     this.m_hyperspace = ["S"];
 };
 
 //------------------------------------------------------------------------------
-// Public getter and setter methods
+// Public prototype getter and setter methods
 //------------------------------------------------------------------------------
 
 /**
  * Up.
  *
  * @member {boolean} up
- * @memberof rymdsten.util.MappingKeyboard
+ * @memberof rymdsten.util.KeyboardMapping
+ * @instance
  * @readonly
  */
-Object.defineProperty(rymdsten.util.MappingKeyboard.prototype, "up", {
+Object.defineProperty(rymdsten.util.KeyboardMapping.prototype, "up", {
     /**
-     * @this rymdsten.util.MappingKeyboard
+     * @this rymdsten.util.KeyboardMapping
      * @ignore
      */
     get : function() {
-        return rune.system.Main.instance.inputs.keyboard.pressed(this.m_up[this.m_playerID]);
+        return rune.system.Application.instance.inputs.keyboard.pressed(this.m_up[this.m_playerID]);
     }
 });
 
@@ -92,16 +95,17 @@ Object.defineProperty(rymdsten.util.MappingKeyboard.prototype, "up", {
  * Right.
  *
  * @member {boolean} right
- * @memberof rymdsten.util.MappingKeyboard
+ * @memberof rymdsten.util.KeyboardMapping
+ * @instance
  * @readonly
  */
-Object.defineProperty(rymdsten.util.MappingKeyboard.prototype, "right", {
+Object.defineProperty(rymdsten.util.KeyboardMapping.prototype, "right", {
     /**
-     * @this rymdsten.util.MappingKeyboard
+     * @this rymdsten.util.KeyboardMapping
      * @ignore
      */
     get : function() {
-        return rune.system.Main.instance.inputs.keyboard.pressed(this.m_right[this.m_playerID]);
+        return rune.system.Application.instance.inputs.keyboard.pressed(this.m_right[this.m_playerID]);
     }
 });
 
@@ -109,16 +113,17 @@ Object.defineProperty(rymdsten.util.MappingKeyboard.prototype, "right", {
  * Left.
  *
  * @member {boolean} left.
- * @memberof rymdsten.util.MappingKeyboard
+ * @memberof rymdsten.util.KeyboardMapping
+ * @instance
  * @readonly
  */
-Object.defineProperty(rymdsten.util.MappingKeyboard.prototype, "left", {
+Object.defineProperty(rymdsten.util.KeyboardMapping.prototype, "left", {
     /**
-     * @this rymdsten.util.MappingKeyboard
+     * @this rymdsten.util.KeyboardMapping
      * @ignore
      */
     get : function() {
-        return rune.system.Main.instance.inputs.keyboard.pressed(this.m_left[this.m_playerID]);
+        return rune.system.Application.instance.inputs.keyboard.pressed(this.m_left[this.m_playerID]);
     }
 });
 
@@ -126,16 +131,17 @@ Object.defineProperty(rymdsten.util.MappingKeyboard.prototype, "left", {
  * Fire.
  *
  * @member {boolean} fire.
- * @memberof rymdsten.util.MappingKeyboard
+ * @memberof rymdsten.util.KeyboardMapping
+ * @instance
  * @readonly
  */
-Object.defineProperty(rymdsten.util.MappingKeyboard.prototype, "fire", {
+Object.defineProperty(rymdsten.util.KeyboardMapping.prototype, "fire", {
     /**
-     * @this rymdsten.util.MappingKeyboard
+     * @this rymdsten.util.KeyboardMapping
      * @ignore
      */
     get : function() {
-        return rune.system.Main.instance.inputs.keyboard.justPressed(this.m_fire[this.m_playerID]);
+        return rune.system.Application.instance.inputs.keyboard.justPressed(this.m_fire[this.m_playerID]);
     }
 });
 
@@ -143,15 +149,16 @@ Object.defineProperty(rymdsten.util.MappingKeyboard.prototype, "fire", {
  * Hyperspace.
  *
  * @member {boolean} hyperspace
- * @memberof rymdsten.util.MappingKeyboard
+ * @memberof rymdsten.util.KeyboardMapping
+ * @instance
  * @readonly
  */
-Object.defineProperty(rymdsten.util.MappingKeyboard.prototype, "hyperspace", {
+Object.defineProperty(rymdsten.util.KeyboardMapping.prototype, "hyperspace", {
     /**
-     * @this rymdsten.util.MappingKeyboard
+     * @this rymdsten.util.KeyboardMapping
      * @ignore
      */
     get : function() {
-        return rune.system.Main.instance.inputs.keyboard.justPressed(this.m_hyperspace[this.m_playerID]);
+        return rune.system.Application.instance.inputs.keyboard.justPressed(this.m_hyperspace[this.m_playerID]);
     }
 });

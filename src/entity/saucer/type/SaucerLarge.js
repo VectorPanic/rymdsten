@@ -8,11 +8,11 @@
  * @constructor
  * @extends rymdsten.entity.Saucer
  *
- * @param {rymdsten.entity.Saucers} saucers ...
+ * @param {rymdsten.entity.Saucers} saucers Group that owns the saucer.
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents a large saucer.
  */
 rymdsten.entity.SaucerLarge = function(saucers) {
@@ -20,41 +20,41 @@ rymdsten.entity.SaucerLarge = function(saucers) {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rymdsten.entity.Saucer.
      */
     rymdsten.entity.Saucer.call(this, 40, 24, "rymdsten_texture_saurcer_large_40x24", saucers);
-    
+
     //--------------------------------------------------------------------------
     // Override public properties
     //--------------------------------------------------------------------------
-    
+
     /**
      * @inheritDoc
      */
     this.attack = 5000;
-    
+
     /**
      * @inheritDoc
      */
     this.aiming = 360;
-    
+
     /**
      * @inheritDoc
      */
-    this.beat = this.resources.get("rymdsten_sound_saucer_beat_large");
-    
+    this.beat = this.application.sounds.sound.get("rymdsten_sound_saucer_beat_large");
+
     /**
      * @inheritDoc
      */
     this.score = 200;
-    
+
     /**
      * @inheritDoc
      */
     this.speed = 0.5;
-    
+
     /**
      * @inheritDoc
      */

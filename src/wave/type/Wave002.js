@@ -10,17 +10,17 @@
  *
  * @class
  * @classdesc
- * 
- * Wave 001.
+ *
+ * Wave 002.
  */
-rymdsten.wave.Wave_001 = function() {
+rymdsten.wave.Wave002 = function() {
 
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rymdsten.wave.Wave.
      */
     rymdsten.wave.Wave.call(this);
 };
@@ -29,8 +29,8 @@ rymdsten.wave.Wave_001 = function() {
 // Inheritance
 //------------------------------------------------------------------------------
 
-rymdsten.wave.Wave_001.prototype = Object.create(rymdsten.wave.Wave.prototype);
-rymdsten.wave.Wave_001.prototype.constructor = rymdsten.wave.Wave_001;
+rymdsten.wave.Wave002.prototype = Object.create(rymdsten.wave.Wave.prototype);
+rymdsten.wave.Wave002.prototype.constructor = rymdsten.wave.Wave002;
 
 //------------------------------------------------------------------------------
 // Override protected prototype methods
@@ -39,6 +39,6 @@ rymdsten.wave.Wave_001.prototype.constructor = rymdsten.wave.Wave_001;
 /**
  * @inheritDoc
  */
-rymdsten.wave.Wave_001.prototype.m_construct = function() {
-    this.add("large", 4);
+rymdsten.wave.Wave002.prototype.m_construct = function() {
+    this.add("large", 5);
 };

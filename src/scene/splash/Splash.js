@@ -10,15 +10,15 @@
  *
  * @class
  * @classdesc
- * 
- * ...
+ *
+ * Displays the studio logo before loading the game scene.
  */
 rymdsten.scene.Splash = function() {
 
     //--------------------------------------------------------------------------
     // Private properties
     //--------------------------------------------------------------------------
-    
+
     /**
      * The Overthinkers logo.
      *
@@ -26,21 +26,21 @@ rymdsten.scene.Splash = function() {
      * @private
      */
     this.m_logo = null;
-    
+
     /**
      * Sound FX.
      *
-     * @type {rymdsten.ui.OverthinkersLogo}
+     * @type {rune.media.Sound}
      * @private
      */
-    this.m_sound = this.application.resources.get("rymdsten_sound_asteroid_explode_large");
+    this.m_sound = this.application.sounds.sound.get("rymdsten_sound_asteroid_explode_large");
 
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.scene.Scene.
      */
     rune.scene.Scene.call(this);
 };
@@ -93,7 +93,7 @@ rymdsten.scene.Splash.prototype.init = function() {
  */
 rymdsten.scene.Splash.prototype.m_initCamera = function() {
     rune.scene.Scene.prototype.m_initCamera.call(this);
-    this.cameras.getCamera(0).fade.opacity = 1.0;
+    this.cameras.getCameraAt(0).fade.opacity = 1.0;
     this.timers.create({
         duration: rymdsten.scene.Splash.DELAY_DURATION,
         scope: this,
@@ -108,7 +108,7 @@ rymdsten.scene.Splash.prototype.m_initCamera = function() {
 /**
  * Creates the logo.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Splash.prototype.m_initLogo = function() {
@@ -123,12 +123,12 @@ rymdsten.scene.Splash.prototype.m_initLogo = function() {
 /**
  * Fade in camera.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Splash.prototype.m_fadeIn = function() {
     this.m_sound.play(true);
-    this.cameras.getCamera(0).fade.in(
+    this.cameras.getCameraAt(0).fade.in(
         rymdsten.scene.Splash.FADE_DURATION,
         this.m_onFadeInComplete,
         this
@@ -138,7 +138,7 @@ rymdsten.scene.Splash.prototype.m_fadeIn = function() {
 /**
  * On fade in complete.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Splash.prototype.m_onFadeInComplete = function() {
@@ -152,11 +152,11 @@ rymdsten.scene.Splash.prototype.m_onFadeInComplete = function() {
 /**
  * Fade out camera.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Splash.prototype.m_fadeOut = function() {
-    this.cameras.getCamera(0).fade.out(
+    this.cameras.getCameraAt(0).fade.out(
         rymdsten.scene.Splash.FADE_DURATION,
         this.m_onFadeOutComplete,
         this
@@ -166,7 +166,7 @@ rymdsten.scene.Splash.prototype.m_fadeOut = function() {
 /**
  * On fade out complete.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.Splash.prototype.m_onFadeOutComplete = function() {

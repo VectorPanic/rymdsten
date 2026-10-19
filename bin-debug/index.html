@@ -11,11 +11,11 @@
         <!-- DEMO APPLICATION SOURCE CODE -->
         <script src="../src/scope/Manifest.js"></script>
 
-        <script src="./../src/util/MappingKeyboard.js"></script>
-        <script src="./../src/util/MappingGamepad.js"></script>
+        <script src="./../src/util/KeyboardMapping.js"></script>
+        <script src="./../src/util/GamepadMapping.js"></script>
         <script src="./../src/util/Controls.js"></script>
         
-        <script src="../src/data/manifest/Manifest.js"></script>
+        <script src="../src/data/resource/Requests.js"></script>
         
         <script src="./../src/ui/graphic/OverthinkersLogo.js"></script>
         <script src="./../src/ui/life/Life.js"></script>
@@ -30,6 +30,8 @@
         <script src="./../src/entity/body/Body.js"></script>
         <script src="./../src/entity/bullet/Bullet.js"></script>
         <script src="./../src/entity/bullet/Bullets.js"></script>
+        <script src="./../src/entity/ship/ShipDebris.js"></script>
+        <script src="./../src/entity/ship/ThrustSpark.js"></script>
         <script src="./../src/entity/ship/Ship.js"></script>
         <script src="./../src/entity/ship/Ships.js"></script>
         <script src="./../src/entity/asteroid/Asteroid.js"></script>
@@ -46,9 +48,9 @@
         
         <script src="./../src/wave/Wave.js"></script>
         <script src="./../src/wave/Waves.js"></script>
-        <script src="./../src/wave/type/Wave_001.js"></script>
-        <script src="./../src/wave/type/Wave_002.js"></script>
-        <script src="./../src/wave/type/Wave_003.js"></script>
+        <script src="./../src/wave/type/Wave001.js"></script>
+        <script src="./../src/wave/type/Wave002.js"></script>
+        <script src="./../src/wave/type/Wave003.js"></script>
         
         <script src="./../src/scene/splash/Splash.js"></script>
         <script src="./../src/scene/game/state/GameStateDead.js"></script>
@@ -58,14 +60,14 @@
         <script src="./../src/scene/game/state/GameStateStart.js"></script>
         <script src="./../src/scene/game/Game.js"></script>
         
-        <script src="../src/system/Main.js"></script>
+        <script src="../src/system/Application.js"></script>
         <script src="../src/scope/Alias.js"></script>
         
         <!-- BOOTSTRAP -->
         <script>
             
             window.onload = function() {
-                var app = new rymdsten.system.Main();
+                var app = new rymdsten.system.Application();
                 app.start();
             }
             

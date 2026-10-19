@@ -8,7 +8,9 @@
   },
   "scripts": {
     "test": "electron ./bin-debug/bootstrap.js",
-    "start": "electron ./bin/bootstrap.js"
+    "start": "electron ./bin/bootstrap.js",
+    "build": "cd scripts/shell && bash build.sh",
+    "test:fps": "node --test tests/framerate.cjs"
   },
   "author": "Henrik Andersen",
   "license": "MIT",

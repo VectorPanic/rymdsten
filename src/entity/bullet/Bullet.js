@@ -8,12 +8,12 @@
  * @constructor
  * @extends rymdsten.entity.Body
  *
- * @param {number} x ...
- * @param {number} y ...
+ * @param {number} x Horizontal position in pixels.
+ * @param {number} y Vertical position in pixels.
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents a bullet.
  */
 rymdsten.entity.Bullet = function(x, y) {
@@ -35,7 +35,7 @@ rymdsten.entity.Bullet = function(x, y) {
     //--------------------------------------------------------------------------
 
     /**
-     * The speed of the bullet.
+     * Velocity added per 60 Hz reference step.
      *
      * @type {number}
      * @protected
@@ -45,15 +45,15 @@ rymdsten.entity.Bullet = function(x, y) {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rymdsten.entity.Body.
      */
     rymdsten.entity.Body.call(this, x, y, 3, 3, "#ffffffff");
 };
 
 //------------------------------------------------------------------------------
-//  Inheritance
+// Inheritance
 //------------------------------------------------------------------------------
 
 rymdsten.entity.Bullet.prototype = Object.create(rymdsten.entity.Body.prototype);
@@ -78,12 +78,13 @@ rymdsten.entity.Bullet.prototype.update = function(step) {
 /**
  * Calculates movement.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.entity.Bullet.prototype.m_updateMotion = function(step) {
-    this.velocity.x += Math.cos(rune.util.Math.degreesToRadians(this.rotation)) * this.m_speed;
-    this.velocity.y += Math.sin(rune.util.Math.degreesToRadians(this.rotation)) * this.m_speed;
+    var scale = step / (1000 / 60);
+    this.velocity.x += Math.cos(rune.util.Math.degreesToRadians(this.rotation)) * this.m_speed * scale;
+    this.velocity.y += Math.sin(rune.util.Math.degreesToRadians(this.rotation)) * this.m_speed * scale;
 };

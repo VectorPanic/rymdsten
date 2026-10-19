@@ -10,7 +10,7 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * Game over state.
  */
 rymdsten.scene.GameStateOver = function() {
@@ -26,7 +26,7 @@ rymdsten.scene.GameStateOver = function() {
      * @private
      */
     this.m_controls = new rymdsten.util.Controls();
-    
+
     /**
      * Game over text.
      *
@@ -38,9 +38,9 @@ rymdsten.scene.GameStateOver = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.state.State.
      */
     rune.state.State.call(this);
 };
@@ -88,14 +88,14 @@ rymdsten.scene.GameStateOver.prototype.dispose = function() {
 /**
  * Creates "Game Over" text.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateOver.prototype.m_initText = function() {
     if (this.m_text == null) {
         this.m_text = new rymdsten.ui.GameOver();
-        this.m_text.centerX = this.owner.cameras.getCamera(0).centerX;
-        this.m_text.centerY = this.owner.cameras.getCamera(0).centerY;
+        this.m_text.centerX = this.owner.cameras.getCameraAt(0).centerX;
+        this.m_text.centerY = this.owner.cameras.getCameraAt(0).centerY;
         this.owner.stage.addChild(this.m_text);
     }
 };
@@ -103,11 +103,11 @@ rymdsten.scene.GameStateOver.prototype.m_initText = function() {
 /**
  * Checks if the current score is a new high score.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateOver.prototype.m_initHighscore = function() {
-    this.owner.application.m_highscores.send(this.owner.hud.score, "NO_NAME", 0);
+    this.owner.application.highscores.send(this.owner.hud.score, "NO_NAME", 0);
     this.owner.hud.highscore.reload();
     this.owner.hud.highscore.centerX = this.owner.hud.highscore.parent.centerX;
 };
@@ -115,9 +115,9 @@ rymdsten.scene.GameStateOver.prototype.m_initHighscore = function() {
 /**
  * Handles input.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateOver.prototype.m_updateInput = function(step) {
@@ -129,7 +129,7 @@ rymdsten.scene.GameStateOver.prototype.m_updateInput = function(step) {
 /**
  * Removes game over text.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateOver.prototype.m_disposeText = function() {

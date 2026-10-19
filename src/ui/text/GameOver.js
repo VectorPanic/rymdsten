@@ -10,7 +10,7 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents game over text.
  */
 rymdsten.ui.GameOver = function() {
@@ -18,16 +18,16 @@ rymdsten.ui.GameOver = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.text.BitmapField.
      */
     rune.text.BitmapField.call(this, "game over", "rymdsten_texture_font_large_544x78");
-    
+
     //--------------------------------------------------------------------------
     // Override public properties
     //--------------------------------------------------------------------------
-    
+
     /**
      * @inheritDoc
      */

@@ -9,7 +9,7 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents a wave of asteroids.
  */
 rymdsten.wave.Wave = function() {
@@ -25,13 +25,13 @@ rymdsten.wave.Wave = function() {
      * @private
      */
     this.m_asteroids = [];
-    
+
     //--------------------------------------------------------------------------
     // Constructor call
     //--------------------------------------------------------------------------
 
     /**
-     * ...
+     * Construct the required subsystems.
      */
     this.m_construct();
 };
@@ -43,10 +43,10 @@ rymdsten.wave.Wave = function() {
 /**
  * Add asteroid to wave.
  *
- * @param {string} type ...
- * @param {number} [num=1] ...
+ * @param {string} type Size identifier of the object to create.
+ * @param {number} [num=1] Number of objects to add.
  *
- * @return {undefined}
+ * @returns {undefined}
  */
 rymdsten.wave.Wave.prototype.add = function(type, num) {
     num = num || 1;
@@ -62,7 +62,7 @@ rymdsten.wave.Wave.prototype.add = function(type, num) {
 /**
  * Class constructor.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @protected
  */
 rymdsten.wave.Wave.prototype.m_construct = function() {

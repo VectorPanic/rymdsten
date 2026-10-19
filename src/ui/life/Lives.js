@@ -10,11 +10,11 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents a manager for life.
  */
 rymdsten.ui.Lives = function() {
-    
+
     //--------------------------------------------------------------------------
     // Public constant
     //--------------------------------------------------------------------------
@@ -29,9 +29,9 @@ rymdsten.ui.Lives = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.display.DisplayObjectContainer.
      */
     rune.display.DisplayObjectContainer.call(this, 0, 0, 18 * this.MAX_LIVES, 18, "");
 };
@@ -79,7 +79,7 @@ Object.defineProperty(rymdsten.ui.Lives.prototype, "num", {
     get : function() {
         return this.numChildren;
     },
-    
+
     /**
      * @this rymdsten.ui.Lives
      * @ignore
@@ -108,7 +108,9 @@ rymdsten.ui.Lives.prototype.init = function() {
 /**
  * Creates extra life.
  *
- * @return {undefined}
+ * @param {number} num Number of life icons to display.
+ *
+ * @returns {undefined}
  * @private
  */
 rymdsten.ui.Lives.prototype.m_initLives = function(num) {
@@ -117,10 +119,10 @@ rymdsten.ui.Lives.prototype.m_initLives = function(num) {
     this.removeChildren();
     for (var i = 0; i < num; i++) {
         var life = new rymdsten.ui.Life();
-            life.x = (i * life.height) - 6;
-            life.y = 5;
-            life.rotation = -90;
-            
+        life.x = (i * life.height) - 6;
+        life.y = 5;
+        life.rotation = -90;
+
         this.addChild(life);
     }
 };

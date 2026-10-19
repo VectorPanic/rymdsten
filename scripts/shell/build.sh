@@ -8,10 +8,10 @@ npx google-closure-compiler \
 --isolation_mode IIFE \
 --js "./../../lib/rune.js" \
 --js "./../../src/scope/Manifest.js" \
---js "./../../src/util/MappingKeyboard.js" \
---js "./../../src/util/MappingGamepad.js" \
+--js "./../../src/util/KeyboardMapping.js" \
+--js "./../../src/util/GamepadMapping.js" \
 --js "./../../src/util/Controls.js" \
---js "./../../src/data/manifest/Manifest.js" \
+--js "./../../src/data/resource/Requests.js" \
 --js "./../../src/ui/graphic/OverthinkersLogo.js" \
 --js "./../../src/ui/life/Life.js" \
 --js "./../../src/ui/life/Lives.js" \
@@ -24,6 +24,8 @@ npx google-closure-compiler \
 --js "./../../src/entity/body/Body.js" \
 --js "./../../src/entity/bullet/Bullet.js" \
 --js "./../../src/entity/bullet/Bullets.js" \
+--js "./../../src/entity/ship/ShipDebris.js" \
+--js "./../../src/entity/ship/ThrustSpark.js" \
 --js "./../../src/entity/ship/Ship.js" \
 --js "./../../src/entity/ship/Ships.js" \
 --js "./../../src/entity/asteroid/Asteroid.js" \
@@ -38,9 +40,9 @@ npx google-closure-compiler \
 --js "./../../src/attack/Attacks.js" \
 --js "./../../src/wave/Wave.js" \
 --js "./../../src/wave/Waves.js" \
---js "./../../src/wave/type/Wave_001.js" \
---js "./../../src/wave/type/Wave_002.js" \
---js "./../../src/wave/type/Wave_003.js" \
+--js "./../../src/wave/type/Wave001.js" \
+--js "./../../src/wave/type/Wave002.js" \
+--js "./../../src/wave/type/Wave003.js" \
 --js "./../../src/scene/splash/Splash.js" \
 --js "./../../src/scene/game/state/GameStateDead.js" \
 --js "./../../src/scene/game/state/GameStateIntro.js" \
@@ -48,6 +50,6 @@ npx google-closure-compiler \
 --js "./../../src/scene/game/state/GameStatePlay.js" \
 --js "./../../src/scene/game/state/GameStateStart.js" \
 --js "./../../src/scene/game/Game.js" \
---js "./../../src/system/Main.js" \
+--js "./../../src/system/Application.js" \
 --js "./../../src/scope/Alias.js" \
 --js_output_file "./../../dist/rymdsten.js";

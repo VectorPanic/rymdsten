@@ -8,11 +8,11 @@
  * @constructor
  * @extends rune.display.DisplayGroup
  *
- * @param {rymdsten.scene.Game} game ...
+ * @param {rymdsten.scene.Game} game Game scene that owns this manager.
  *
  * @class
  * @classdesc
- * 
+ *
  * Represents a handler for ships.
  */
 rymdsten.entity.Ships = function(game) {
@@ -29,12 +29,28 @@ rymdsten.entity.Ships = function(game) {
      */
     this.m_game = game;
 
+    /**
+     * Scene-owned exhaust emitter, reused across respawns.
+     *
+     * @type {rune.particle.Emitter}
+     * @private
+     */
+    this.m_emitter = null;
+
+    /**
+     * Scene-owned debris emitter that remains after a ship is destroyed.
+     *
+     * @type {rune.particle.Emitter}
+     * @private
+     */
+    this.m_debrisEmitter = null;
+
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.display.DisplayGroup.
      */
     rune.display.DisplayGroup.call(this, this.m_game.stage);
 };
@@ -75,37 +91,72 @@ Object.defineProperty(rymdsten.entity.Ships.prototype, "bullets", {
 /**
  * Creates a new ship at a specific position.
  *
- * @param {number} [x=0] ...
- * @param {number} [y=0] ...
+ * @param {number} [x=0] Horizontal position in pixels.
+ * @param {number} [y=0] Vertical position in pixels.
  *
- * @return {undefined}
+ * @returns {undefined}
  */
 rymdsten.entity.Ships.prototype.create = function(x, y) {
-    if (this.numChildren == 0) {
+    if (this.numMembers == 0) {
         var ship = new rymdsten.entity.Ship(this);
-            ship.centerX = x;
-            ship.centerY = y;
-            ship.flicker(1000, 60); //@note: Magic numbers.
-            
-        this.addChild(ship);   
+        ship.centerX = x;
+        ship.centerY = y;
+        ship.flicker.start(1000, 60); //@note: Magic numbers.
+
+        this.addMember(ship);
     }
 };
 
 /**
  * Resets all ships.
  *
- * @return {undefined}
+ * @returns {undefined}
  */
 rymdsten.entity.Ships.prototype.reset = function() {
+    if (this.m_emitter != null) this.m_emitter.clear();
+    if (this.m_debrisEmitter != null) this.m_debrisEmitter.clear();
     if (this.m_bullets) {
-        this.m_bullets.removeChildren();
+        this.m_bullets.removeMembers();
     }
-    
-    this.removeChildren();
+
+    this.removeMembers();
+};
+
+/**
+ * Emits exhaust behind the rotated ship with its inherited velocity.
+ *
+ * @param {rymdsten.entity.Ship} ship Ship supplying the emission position and velocity.
+ *
+ * @returns {undefined}
+ */
+rymdsten.entity.Ships.prototype.emitSparks = function(ship) {
+    var angle = rune.util.Math.degreesToRadians(ship.rotation);
+    var distance = 4; // Exhaust origin, in pixels behind the ship center.
+    this.m_emitter.centerX = ship.centerX - Math.cos(angle) * distance;
+    this.m_emitter.centerY = ship.centerY - Math.sin(angle) * distance;
+    this.m_emitter.rotation = ship.rotation;
+    this.m_emitter.velocity.x = ship.velocity.x;
+    this.m_emitter.velocity.y = ship.velocity.y;
+    this.m_emitter.emit(2);
+};
+
+/**
+ * Emits ship fragments at the destruction position with inherited velocity.
+ *
+ * @param {rymdsten.entity.Ship} ship Ship supplying the emission position and velocity.
+ *
+ * @returns {undefined}
+ */
+rymdsten.entity.Ships.prototype.emitDebris = function(ship) {
+    this.m_debrisEmitter.centerX = ship.centerX;
+    this.m_debrisEmitter.centerY = ship.centerY;
+    this.m_debrisEmitter.velocity.x = ship.velocity.x;
+    this.m_debrisEmitter.velocity.y = ship.velocity.y;
+    this.m_debrisEmitter.emit(12);
 };
 
 //------------------------------------------------------------------------------
-// Override Public prototype methods (API)
+// Override public prototype methods (ENGINE)
 //------------------------------------------------------------------------------
 
 /**
@@ -114,6 +165,26 @@ rymdsten.entity.Ships.prototype.reset = function() {
 rymdsten.entity.Ships.prototype.init = function() {
     rune.display.DisplayGroup.prototype.init.call(this);
     this.m_initBullets();
+    this.m_emitter = new rune.particle.Emitter(8, 0, 0, 0, {
+        capacity: 48,
+        minLifespan: 180,
+        maxLifespan: 360,
+        minRotation: -8,
+        maxRotation: 8,
+        particles: [rymdsten.entity.ThrustSpark]
+    });
+    this.m_game.stage.addChild(this.m_emitter);
+    this.m_debrisEmitter = new rune.particle.Emitter(0, 0, 0, 0, {
+        capacity: 64,
+        minLifespan: 800,
+        maxLifespan: 1600,
+        minRotation: -8,
+        maxRotation: 8,
+        dragX: 0.01,
+        dragY: 0.01,
+        particles: [rymdsten.entity.ShipDebris]
+    });
+    this.m_game.stage.addChild(this.m_debrisEmitter);
 };
 
 /**
@@ -128,6 +199,14 @@ rymdsten.entity.Ships.prototype.update = function(step) {
  * @inheritDoc
  */
 rymdsten.entity.Ships.prototype.dispose = function() {
+    if (this.m_debrisEmitter != null) {
+        this.m_debrisEmitter.dispose();
+        this.m_debrisEmitter = null;
+    }
+    if (this.m_emitter != null) {
+        this.m_emitter.dispose();
+        this.m_emitter = null;
+    }
     this.m_disposeBullets();
     rune.display.DisplayGroup.prototype.dispose.call(this);
 };
@@ -139,7 +218,7 @@ rymdsten.entity.Ships.prototype.dispose = function() {
 /**
  * Creates the handler for bullets.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.entity.Ships.prototype.m_initBullets = function() {
@@ -154,27 +233,27 @@ rymdsten.entity.Ships.prototype.m_initBullets = function() {
 /**
  * Checks whether a ship collides with other game objects.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.entity.Ships.prototype.m_updateCollision = function(step) {
-    
+
     // ASTEROIDS
     this.hitTestGroup(
         this.m_game.waves.asteroids,
         this.m_onAsteroidCollision,
         this
     );
-    
+
     // SAUCER
     this.hitTestGroup(
         this.m_game.attacks.saucers,
         this.m_onSaucerCollision,
         this
     );
-    
+
     // SAUCER BULLETS
     this.hitTestGroup(
         this.m_game.attacks.saucers.bullets,
@@ -186,7 +265,7 @@ rymdsten.entity.Ships.prototype.m_updateCollision = function(step) {
 /**
  * Remove the bullet handler.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.entity.Ships.prototype.m_disposeBullets = function() {
@@ -197,54 +276,54 @@ rymdsten.entity.Ships.prototype.m_disposeBullets = function() {
 };
 
 /**
- * Then a ship collides with an asteroid.
+ * Handles a ship colliding with an asteroid.
  *
- * @param {rymdsten.entity.Asteroid} asteroid ...
- * @param {rymdsten.entity.Ship} ship ...
+ * @param {rymdsten.entity.Ship} ship Player ship involved in the collision.
+ * @param {rymdsten.entity.Asteroid} asteroid Asteroid involved in the collision.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
-rymdsten.entity.Ships.prototype.m_onAsteroidCollision = function(asteroid, ship) {
-    if (ship.flickering == false) {
+rymdsten.entity.Ships.prototype.m_onAsteroidCollision = function(ship, asteroid) {
+    if (ship.flicker.active == false) {
         ship.kill();
     }
 };
 
 /**
- * Then a ship collides with a saucer.
+ * Handles a ship colliding with a saucer.
  *
- * @param {rymdsten.entity.Asteroid} asteroid ...
- * @param {rymdsten.entity.Ship} ship ...
+ * @param {rymdsten.entity.Ship} ship Player ship involved in the collision.
+ * @param {rymdsten.entity.Saucer} saucer Saucer involved in the collision.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
-rymdsten.entity.Ships.prototype.m_onSaucerCollision = function(saucer, ship) {
-    if (ship.flickering == false) {
+rymdsten.entity.Ships.prototype.m_onSaucerCollision = function(ship, saucer) {
+    if (ship.flicker.active == false) {
         ship.kill();
     }
-    
-    if (saucer.flickering == false) {
+
+    if (saucer.flicker.active == false) {
         saucer.kill();
     }
 };
 
 /**
- * Then a ship collides with a bullet.
+ * Handles a ship colliding with a bullet.
  *
- * @param {rymdsten.entity.Bullet} bullet ...
- * @param {rymdsten.entity.Ship} ship ...
+ * @param {rymdsten.entity.Ship} ship Player ship involved in the collision.
+ * @param {rymdsten.entity.Bullet} bullet Bullet involved in the collision.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
-rymdsten.entity.Ships.prototype.m_onSaucerBulletCollision = function(bullet, ship) {
-    if (ship.flickering == false) {
+rymdsten.entity.Ships.prototype.m_onSaucerBulletCollision = function(ship, bullet) {
+    if (ship.flicker.active == false) {
         ship.kill();
     }
-    
+
     if (bullet.group != null) {
-        bullet.group.removeChild(bullet);
+        bullet.group.removeMember(bullet);
     }
 };

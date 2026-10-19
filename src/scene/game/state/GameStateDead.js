@@ -10,7 +10,7 @@
  *
  * @class
  * @classdesc
- * 
+ *
  * State for when the player is dead.
  */
 rymdsten.scene.GameStateDead = function() {
@@ -30,9 +30,9 @@ rymdsten.scene.GameStateDead = function() {
     //--------------------------------------------------------------------------
     // Super call
     //--------------------------------------------------------------------------
-    
+
     /**
-     * ...
+     * Extend rune.state.State.
      */
     rune.state.State.call(this);
 };
@@ -63,9 +63,9 @@ rymdsten.scene.GameStateDead.prototype.update = function(step) {
 /**
  * Handles input.
  *
- * @param {number} step ...
+ * @param {number} step Elapsed time in milliseconds.
  *
- * @return {undefined}
+ * @returns {undefined}
  * @private
  */
 rymdsten.scene.GameStateDead.prototype.m_updateInput = function(step) {
