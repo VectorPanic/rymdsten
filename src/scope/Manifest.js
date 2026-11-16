@@ -107,3 +107,23 @@ var rymdsten = function() {
     return m_this;
 
 }();
+
+//------------------------------------------------------------------------------
+// Public static methods
+//------------------------------------------------------------------------------
+
+/**
+ * Creates and starts the application, then returns its entry point instance.
+ *
+ * @param {Function} [callback] Called when application startup is complete.
+ *
+ * @returns {rymdsten.system.Main} The application instance being started.
+ *
+ * @ignore
+ */
+rymdsten.bootstrap = function(callback) {
+    var app = new rymdsten.system.Main();
+        app.start(callback);
+        
+    return app;
+};

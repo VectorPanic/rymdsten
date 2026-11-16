@@ -50,6 +50,6 @@ npx google-closure-compiler \
 --js "./../../src/scene/game/state/GameStatePlay.js" \
 --js "./../../src/scene/game/state/GameStateStart.js" \
 --js "./../../src/scene/game/Game.js" \
---js "./../../src/system/Application.js" \
+--js "./../../src/system/Main.js" \
 --js "./../../src/scope/Alias.js" \
 --js_output_file "./../../dist/rymdsten.js";

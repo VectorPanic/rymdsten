@@ -13,7 +13,7 @@
  *
  * The main application class.
  */
-rymdsten.system.Application = function() {
+rymdsten.system.Main = function() {
 
     //--------------------------------------------------------------------------
     // Super call
@@ -29,6 +29,7 @@ rymdsten.system.Application = function() {
         scene: rymdsten.scene.Splash,
         resources: rymdsten.data.Requests,
         debug: false,
+        splashScreen: false, 
         useKeyboard: true,
         useGamepads: true,
         framerate: 60,
@@ -41,5 +42,5 @@ rymdsten.system.Application = function() {
 // Inheritance
 //------------------------------------------------------------------------------
 
-rymdsten.system.Application.prototype = Object.create(rune.system.Application.prototype);
-rymdsten.system.Application.prototype.constructor = rymdsten.system.Application;
+rymdsten.system.Main.prototype = Object.create(rune.system.Application.prototype);
+rymdsten.system.Main.prototype.constructor = rymdsten.system.Main;
